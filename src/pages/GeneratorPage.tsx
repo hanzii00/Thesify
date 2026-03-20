@@ -5,10 +5,8 @@ import GeneratorForm, { type GeneratorFormData } from "@/components/GeneratorFor
 import ResultCard, { type CapstoneResult } from "@/components/ResultCard";
 import SkeletonLoader from "@/components/SkeletonLoader";
 
-// ─── API Config ───────────────────────────────────────────────────────────────
-const API_BASE_URL = "http://localhost:5147";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-// ─── API Call to .NET Backend ─────────────────────────────────────────────────
 const generateCapstone = async (data: GeneratorFormData): Promise<CapstoneResult> => {
   const response = await fetch(`${API_BASE_URL}/api/capstone/generate`, {
     method: "POST",
