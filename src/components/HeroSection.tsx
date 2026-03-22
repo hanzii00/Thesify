@@ -1,12 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Lightbulb, Zap, ArrowRight } from "lucide-react";
-
-const features = [
-  { icon: Sparkles, label: "AI-Powered Ideas" },
-  { icon: Lightbulb, label: "Tailored to Your Course" },
-  { icon: Zap, label: "Instant Generation" },
-];
+import { Sparkles, ArrowRight } from "lucide-react";
 
 interface HeroSectionProps {
   onGetStarted: () => void;
@@ -14,67 +8,67 @@ interface HeroSectionProps {
 
 const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-primary/5 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 rounded-full bg-accent/5 blur-3xl" />
-      </div>
+    <section className="min-h-screen flex items-center justify-center bg-slate-50">
+      <div className="container px-6 py-20 flex flex-col items-center text-center max-w-3xl mx-auto">
 
-      <div className="container relative z-10 flex flex-col items-center text-center px-4 py-20">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mb-8"
+          transition={{ duration: 0.4 }}
+          className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-medium text-slate-500 mb-8 shadow-sm"
         >
-          <Sparkles className="h-4 w-4" />
+          <Sparkles className="h-3.5 w-3.5 text-indigo-500" />
           AI-Powered Capstone Generator
         </motion.div>
 
         <motion.h1
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-display text-5xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-tight max-w-4xl"
+          transition={{ duration: 0.4, delay: 0.1 }}
+          className="text-4xl sm:text-5xl font-bold tracking-tight text-slate-900 leading-tight"
         >
-          Generate Your{" "}
-          <span className="text-primary">Capstone Idea</span>{" "}
-          in Seconds
+          Find your perfect{" "}
+          <span className="text-indigo-600">capstone idea</span>
         </motion.h1>
 
         <motion.p
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-6 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed"
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="mt-5 text-base text-slate-500 max-w-xl leading-relaxed"
         >
-          Stop stressing over your capstone project. Let AI craft the perfect idea
-          tailored to your course, interests, and timeline.
+          Tell us your course and interests. We'll generate a tailored capstone project idea with features, tech stack, and methodology.
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-10"
+          transition={{ duration: 0.4, delay: 0.3 }}
+          className="mt-8 flex flex-col sm:flex-row gap-3"
         >
-          <Button variant="hero" size="xl" onClick={onGetStarted}>
-            Generate Now
-            <ArrowRight className="ml-1 h-5 w-5" />
-          </Button>
+          <button
+            onClick={onGetStarted}
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-6 py-3 text-sm font-semibold text-white hover:bg-indigo-700 transition-colors"
+          >
+            Get Started
+            <ArrowRight className="h-4 w-4" />
+          </button>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.45 }}
-          className="mt-16 flex flex-wrap justify-center gap-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.5 }}
+          className="mt-16 grid grid-cols-3 gap-6 w-full max-w-lg"
         >
-          {features.map((f) => (
-            <div key={f.label} className="flex items-center gap-2 text-muted-foreground">
-              <f.icon className="h-5 w-5 text-primary" />
-              <span className="text-sm font-medium">{f.label}</span>
+          {[
+            { value: "10+", label: "Courses supported" },
+            { value: "AI", label: "Llama 3.3 powered" },
+            { value: "Free", label: "No sign-up needed" },
+          ].map((stat) => (
+            <div key={stat.label} className="flex flex-col items-center gap-1">
+              <span className="text-xl font-bold text-slate-900">{stat.value}</span>
+              <span className="text-xs text-slate-400">{stat.label}</span>
             </div>
           ))}
         </motion.div>
