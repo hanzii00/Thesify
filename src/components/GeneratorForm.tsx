@@ -181,7 +181,8 @@ const GeneratorForm = ({ onSubmit, isLoading }: GeneratorFormProps) => {
             {customInterests.map((interest) => (
               <span
                 key={interest}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-indigo-50 text-indigo-600 border border-indigo-200"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium bg-primary text-primary-foreground border border-primary"
+
               >
                 {interest}
                 <button
