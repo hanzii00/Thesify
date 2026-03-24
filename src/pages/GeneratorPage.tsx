@@ -92,7 +92,7 @@ const GeneratorPage = () => {
 
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            ThesisGenie
+            Thesify
           </a>
           <span className="text-xs font-medium text-indigo-500 bg-indigo-50 border border-indigo-100 px-2.5 py-1 rounded-full">
             Generator
