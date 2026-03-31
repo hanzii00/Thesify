@@ -1,56 +1,12 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Sparkles, Loader2, Plus, X } from "lucide-react";
-
-const COURSES = [
-  // Technology
-  "Computer Science", "Information Technology", "Information Systems",
-  "Data Science", "Cybersecurity", "Software Engineering",
-  "Artificial Intelligence", "Computer Engineering", "Network Engineering",
-  "Database Administration", "Web Development", "Game Development",
-  "Embedded Systems", "Robotics Engineering",
-  // Business
-  "Business Administration", "Accountancy", "Marketing Management",
-  "Financial Management", "Human Resource Management", "Entrepreneurship",
-  "Operations Management", "Supply Chain Management", "International Business",
-  "Economics", "Public Administration",
-  // Engineering
-  "Civil Engineering", "Mechanical Engineering", "Electrical Engineering",
-  "Electronics Engineering", "Chemical Engineering", "Industrial Engineering",
-  "Environmental Engineering", "Aerospace Engineering", "Biomedical Engineering",
-  "Petroleum Engineering", "Agricultural Engineering",
-  // Health & Sciences
-  "Health Sciences", "Nursing", "Medicine", "Pharmacy",
-  "Physical Therapy", "Medical Technology", "Nutrition and Dietetics",
-  "Public Health", "Biology", "Chemistry", "Physics", "Mathematics",
-  "Environmental Science", "Marine Science", "Forensic Science",
-  // Education & Humanities
-  "Education", "Psychology", "Sociology", "Political Science",
-  "Communication", "Journalism", "Social Work", "Philosophy",
-  "History", "Literature", "Linguistics",
-  // Arts & Design
-  "Architecture", "Fine Arts", "Graphic Design", "Interior Design",
-  "Fashion Design", "Film and Media Arts", "Music Technology",
-  "Multimedia Arts", "Animation",
-  // Hospitality & Others
-  "Tourism and Hospitality Management", "Culinary Arts",
-  "Aviation", "Criminology", "Library Science",
-];
-
-const INTEREST_OPTIONS = [
-  "Web Development", "Mobile App", "Machine Learning", "IoT",
-  "Blockchain", "Cloud Computing", "Game Development", "Data Analytics",
-  "E-commerce", "Social Media", "Healthcare", "Education Tech",
-];
 
 export interface GeneratorFormData {
   course: string;
   difficulty: string;
-  interests: string[];
-  timeframe: string;
-  budget: string;
-  notes: string;
+  interests: string | string[];
+  timeframe?: string;
+  budget?: string;
+  notes?: string;
 }
 
 interface GeneratorFormProps {
@@ -58,233 +14,151 @@ interface GeneratorFormProps {
   isLoading: boolean;
 }
 
+const DIFFICULTIES = ["Beginner", "Intermediate", "Advanced"];
+const TIMEFRAMES = ["1 month", "2–3 months", "4–6 months", "6–12 months"];
+const BUDGETS = ["Free / No budget", "Under ₱5,000", "₱5,000–₱20,000", "₱20,000+"];
+
+const Field = ({ label, children, optional }: { label: string; children: React.ReactNode; optional?: boolean }) => (
+  <div className="space-y-1.5">
+    <div className="flex items-center gap-1.5">
+      <label className="text-[11px] font-semibold tracking-widest text-stone-400 uppercase">{label}</label>
+      {optional && <span className="text-[10px] text-stone-300 font-medium">optional</span>}
+    </div>
+    {children}
+  </div>
+);
+
+const PillGroup = ({
+  options,
+  value,
+  onChange,
+}: {
+  options: string[];
+  value: string;
+  onChange: (v: string) => void;
+}) => (
+  <div className="flex flex-wrap gap-2">
+    {options.map((opt) => (
+      <button
+        key={opt}
+        type="button"
+        onClick={() => onChange(opt)}
+        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
+          value === opt
+            ? "bg-stone-900 text-white border-stone-900"
+            : "bg-white text-stone-600 border-stone-200 hover:border-stone-300 hover:bg-stone-50"
+        }`}
+      >
+        {opt}
+      </button>
+    ))}
+  </div>
+);
+
+const inputClass =
+  "w-full rounded-xl border border-stone-200 bg-white px-3.5 py-2.5 text-sm text-stone-800 placeholder-stone-400 font-light outline-none transition-all hover:border-stone-300 focus:border-stone-400 focus:ring-2 focus:ring-stone-200";
+
 const GeneratorForm = ({ onSubmit, isLoading }: GeneratorFormProps) => {
   const [course, setCourse] = useState("");
-  const [difficulty, setDifficulty] = useState("Medium");
-  const [interests, setInterests] = useState<string[]>([]);
-  const [timeframe, setTimeframe] = useState("3 months");
+  const [difficulty, setDifficulty] = useState("Intermediate");
+  const [interests, setInterests] = useState("");
+  const [timeframe, setTimeframe] = useState("");
   const [budget, setBudget] = useState("");
   const [notes, setNotes] = useState("");
-  const [customInterest, setCustomInterest] = useState("");
-
-  const toggleInterest = (interest: string) => {
-    setInterests((prev) =>
-      prev.includes(interest)
-        ? prev.filter((i) => i !== interest)
-        : [...prev, interest]
-    );
-  };
-
-  const addCustomInterest = () => {
-    const trimmed = customInterest.trim();
-    if (trimmed && !interests.includes(trimmed)) {
-      setInterests((prev) => [...prev, trimmed]);
-    }
-    setCustomInterest("");
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      addCustomInterest();
-    }
-  };
-
-  const removeInterest = (interest: string) => {
-    setInterests((prev) => prev.filter((i) => i !== interest));
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSubmit({ course, difficulty, interests, timeframe, budget, notes });
   };
 
-  // Custom interests are ones not in the default list
-  const customInterests = interests.filter((i) => !INTEREST_OPTIONS.includes(i));
+  const isValid = course.trim() && interests.trim();
 
   return (
-    <motion.form
+    // h-full so it fills whatever height the parent gives it
+    <form
       onSubmit={handleSubmit}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-      className="w-full max-w-2xl mx-auto space-y-6"
+      className="flex flex-col h-full rounded-2xl border border-stone-200 bg-white shadow-sm overflow-hidden"
     >
-      {/* Course */}
-      <div className="space-y-2">
-        <label className="text-sm font-semibold text-foreground flex items-center gap-2">
-          🎓 Course / Program
-        </label>
-        <select
-          value={course}
-          onChange={(e) => setCourse(e.target.value)}
-          required
-          className="w-full h-12 rounded-xl border border-input bg-card px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all"
-        >
-          <option value="">Select your course...</option>
-          {COURSES.map((c) => (
-            <option key={c} value={c}>{c}</option>
-          ))}
-        </select>
+      {/* Pinned header */}
+      <div className="shrink-0 px-6 py-4 border-b border-stone-100 bg-stone-50">
+        <p className="text-[11px] font-semibold tracking-widest text-stone-400 uppercase mb-0.5">
+          Project Details
+        </p>
+        <p className="text-xs text-stone-400 font-light">Tell us what you're working with</p>
       </div>
 
-      {/* Difficulty */}
-      <div className="space-y-2">
-        <label className="text-sm font-semibold text-foreground flex items-center gap-2">
-          📊 Difficulty
-        </label>
-        <div className="flex gap-3">
-          {["Easy", "Medium", "Hard"].map((d) => (
-            <button
-              key={d}
-              type="button"
-              onClick={() => setDifficulty(d)}
-              className={`flex-1 h-11 rounded-xl text-sm font-medium transition-all duration-200 border ${
-                difficulty === d
-                  ? "bg-primary text-primary-foreground border-primary shadow-button"
-                  : "bg-card text-foreground border-input hover:border-primary/40"
-              }`}
-            >
-              {d}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Interests */}
-      <div className="space-y-2">
-        <label className="text-sm font-semibold text-foreground flex items-center gap-2">
-          💡 Interests
-        </label>
-
-        {/* Preset chips */}
-        <div className="flex flex-wrap gap-2">
-          {INTEREST_OPTIONS.map((interest) => (
-            <button
-              key={interest}
-              type="button"
-              onClick={() => toggleInterest(interest)}
-              className={`px-4 py-2 rounded-full text-xs font-medium transition-all duration-200 border ${
-                interests.includes(interest)
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-card text-muted-foreground border-input hover:border-primary/40 hover:text-foreground"
-              }`}
-            >
-              {interest}
-            </button>
-          ))}
-        </div>
-
-        {/* Custom interest tags */}
-        {customInterests.length > 0 && (
-          <div className="flex flex-wrap gap-2 pt-1">
-            {customInterests.map((interest) => (
-              <span
-                key={interest}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium bg-primary text-primary-foreground border border-primary"
-
-              >
-                {interest}
-                <button
-                  type="button"
-                  onClick={() => removeInterest(interest)}
-                  className="hover:text-indigo-900 transition-colors"
-                >
-                  <X className="h-3 w-3" />
-                </button>
-              </span>
-            ))}
-          </div>
-        )}
-
-        {/* Custom interest input */}
-        <div className="flex gap-2 pt-1">
+      {/* Scrollable fields — fills remaining space */}
+      <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
+        <Field label="Course / Discipline">
           <input
             type="text"
-            value={customInterest}
-            onChange={(e) => setCustomInterest(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Add your own interest..."
-            className="flex-1 h-10 rounded-xl border border-input bg-card px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+            value={course}
+            onChange={(e) => setCourse(e.target.value)}
+            placeholder="e.g. Information Technology, Nursing, Architecture..."
+            className={inputClass}
+            autoComplete="off"
           />
-          <button
-            type="button"
-            onClick={addCustomInterest}
-            disabled={!customInterest.trim()}
-            className="h-10 px-4 rounded-xl border border-input bg-card text-muted-foreground hover:text-foreground hover:border-primary/40 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            <Plus className="h-4 w-4" />
-          </button>
-        </div>
+        </Field>
+
+        <Field label="Difficulty Level">
+          <PillGroup options={DIFFICULTIES} value={difficulty} onChange={setDifficulty} />
+        </Field>
+
+        <Field label="Interests / Topics">
+          <input
+            type="text"
+            value={interests}
+            onChange={(e) => setInterests(e.target.value)}
+            placeholder="e.g. machine learning, health, education..."
+            className={inputClass}
+          />
+        </Field>
+
+        <Field label="Timeframe" optional>
+          <PillGroup
+            options={TIMEFRAMES}
+            value={timeframe}
+            onChange={(v) => setTimeframe(v === timeframe ? "" : v)}
+          />
+        </Field>
+
+        <Field label="Budget" optional>
+          <PillGroup
+            options={BUDGETS}
+            value={budget}
+            onChange={(v) => setBudget(v === budget ? "" : v)}
+          />
+        </Field>
+
+        <Field label="Additional Notes" optional>
+          <textarea
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            placeholder="Any specific requirements or constraints..."
+            rows={2}
+            className={`${inputClass} resize-none`}
+          />
+        </Field>
       </div>
 
-      {/* Timeframe */}
-      <div className="space-y-2">
-        <label className="text-sm font-semibold text-foreground flex items-center gap-2">
-          ⏳ Timeframe
-        </label>
-        <select
-          value={timeframe}
-          onChange={(e) => setTimeframe(e.target.value)}
-          className="w-full h-12 rounded-xl border border-input bg-card px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all"
+      {/* Pinned footer */}
+      <div className="shrink-0 px-6 py-4 border-t border-stone-100 bg-stone-50">
+        <button
+          type="submit"
+          disabled={!isValid || isLoading}
+          className="w-full flex items-center justify-center gap-2 rounded-xl bg-stone-900 px-5 py-3 text-sm font-semibold text-white hover:bg-stone-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          <option value="1 month">1 month</option>
-          <option value="2 months">2 months</option>
-          <option value="3 months">3 months</option>
-          <option value="4 months">4 months</option>
-          <option value="6 months">6 months</option>
-          <option value="1 year">1 year</option>
-        </select>
+          {isLoading ? (
+            <>
+              <span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+              Generating...
+            </>
+          ) : (
+            "Generate Proposal"
+          )}
+        </button>
       </div>
-
-      {/* Budget */}
-      <div className="space-y-2">
-        <label className="text-sm font-semibold text-foreground flex items-center gap-2">
-          💰 Budget <span className="text-muted-foreground font-normal">(optional)</span>
-        </label>
-        <input
-          type="text"
-          value={budget}
-          onChange={(e) => setBudget(e.target.value)}
-          placeholder="e.g. $500, Free, Low budget..."
-          className="w-full h-12 rounded-xl border border-input bg-card px-4 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all"
-        />
-      </div>
-
-      {/* Notes */}
-      <div className="space-y-2">
-        <label className="text-sm font-semibold text-foreground flex items-center gap-2">
-          📝 Extra Notes <span className="text-muted-foreground font-normal">(optional)</span>
-        </label>
-        <textarea
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          rows={3}
-          placeholder="Any specific requirements, technologies, or ideas you have in mind..."
-          className="w-full rounded-xl border border-input bg-card px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-all resize-none"
-        />
-      </div>
-
-      <Button
-        type="submit"
-        variant="hero"
-        size="xl"
-        disabled={isLoading || !course}
-        className="w-full"
-      >
-        {isLoading ? (
-          <>
-            <Loader2 className="h-5 w-5 animate-spin" />
-            Generating with AI...
-          </>
-        ) : (
-          <>
-            <Sparkles className="h-5 w-5" />
-            Generate Capstone
-          </>
-        )}
-      </Button>
-    </motion.form>
+    </form>
   );
 };
 
