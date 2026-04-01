@@ -1,3 +1,3 @@
-# Welcome to ThesisGenie
+# Welcome to Thesify
 
 
