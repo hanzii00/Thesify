@@ -100,13 +100,6 @@ const GeneratorPage = () => {
             <span style={{ fontFamily: "'DM Serif Display', serif" }} className="text-base">Thesify</span>
           </a>
           <div className="flex items-center gap-3">
-            <a
-              href="/analytics"
-              className="flex items-center gap-1.5 text-xs font-medium text-stone-500 hover:text-stone-800 transition-colors"
-            >
-              <BarChart2 className="h-3.5 w-3.5" />
-              Analytics
-            </a>
             <span className="text-xs font-medium text-stone-500 bg-white border border-stone-200 px-3 py-1 rounded-full shadow-sm">
               Idea Generator
             </span>
