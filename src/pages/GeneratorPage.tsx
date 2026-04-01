@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, BarChart2 } from "lucide-react";
 import GeneratorForm, { type GeneratorFormData } from "@/components/GeneratorForm";
 import ResultCard, { type CapstoneResult } from "@/components/ResultCard";
 import SkeletonLoader from "@/components/SkeletonLoader";
@@ -99,9 +99,18 @@ const GeneratorPage = () => {
             <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
             <span style={{ fontFamily: "'DM Serif Display', serif" }} className="text-base">Thesify</span>
           </a>
-          <span className="text-xs font-medium text-stone-500 bg-white border border-stone-200 px-3 py-1 rounded-full shadow-sm">
-            Idea Generator
-          </span>
+          <div className="flex items-center gap-3">
+            <a
+              href="/analytics"
+              className="flex items-center gap-1.5 text-xs font-medium text-stone-500 hover:text-stone-800 transition-colors"
+            >
+              <BarChart2 className="h-3.5 w-3.5" />
+              Analytics
+            </a>
+            <span className="text-xs font-medium text-stone-500 bg-white border border-stone-200 px-3 py-1 rounded-full shadow-sm">
+              Idea Generator
+            </span>
+          </div>
         </div>
       </header>
 

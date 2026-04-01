@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { Sparkles, ArrowRight, BarChart2 } from "lucide-react";
 
 interface HeroSectionProps {
   onGetStarted: () => void;
@@ -21,9 +21,18 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
           >
             Thesify
           </span>
-          <span className="text-xs font-medium text-stone-500 bg-white border border-stone-200 px-3 py-1 rounded-full shadow-sm">
-            Beta
-          </span>
+          <div className="flex items-center gap-3">
+            <a
+              href="/analytics"
+              className="flex items-center gap-1.5 text-xs font-medium text-stone-500 hover:text-stone-800 transition-colors"
+            >
+              <BarChart2 className="h-3.5 w-3.5" />
+              Analytics
+            </a>
+            <span className="text-xs font-medium text-stone-500 bg-white border border-stone-200 px-3 py-1 rounded-full shadow-sm">
+              Beta
+            </span>
+          </div>
         </div>
       </header>
 
