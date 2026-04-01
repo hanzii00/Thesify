@@ -4,6 +4,7 @@ import { ArrowLeft, TrendingUp, CheckCircle, XCircle, Clock, BarChart2, BookOpen
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+// Matches C# camelCase serialization
 interface CourseCount {
   course: string;
   count: number;
@@ -71,11 +72,13 @@ const BarGroup = ({ items, max }: { items: { label: string; count: number }[]; m
         transition={{ duration: 0.35, delay: 0.05 * i }}
         className="flex items-center gap-3"
       >
-        <span className="text-xs text-stone-500 font-light w-36 shrink-0 truncate">{item.label}</span>
+        <span className="text-xs text-stone-500 font-light w-36 shrink-0 truncate" title={item.label}>
+          {item.label}
+        </span>
         <div className="flex-1 h-2 rounded-full bg-stone-100 overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
-            animate={{ width: `${(item.count / max) * 100}%` }}
+            animate={{ width: `${Math.max((item.count / max) * 100, 4)}%` }}
             transition={{ duration: 0.6, delay: 0.1 + 0.05 * i, ease: "easeOut" }}
             className="h-full rounded-full bg-stone-800"
           />
@@ -150,10 +153,26 @@ const AnalyticsPage = () => {
     fetchStats();
   }, []);
 
-  const topCourseMax = stats?.topCourses?.[0]?.count ?? 1;
-  const diffMax = stats?.difficultyDistribution
-    ? Math.max(...stats.difficultyDistribution.map((d) => d.count))
-    : 1;
+  // Safe max computation — handles empty arrays and both casing variants from C#
+  const topCourseMax = Math.max(
+    ...(stats?.topCourses?.map((c) => c.count ?? (c as any).Count ?? 0) ?? [1]),
+    1
+  );
+  const diffMax = Math.max(
+    ...(stats?.difficultyDistribution?.map((d) => d.count ?? (d as any).Count ?? 0) ?? [1]),
+    1
+  );
+
+  // Normalize in case ASP.NET serializes PascalCase (shouldn't happen with default options, but just in case)
+  const topCourses = stats?.topCourses?.map((c) => ({
+    label: c.course ?? (c as any).Course ?? "",
+    count: c.count ?? (c as any).Count ?? 0,
+  })) ?? [];
+
+  const diffDist = stats?.difficultyDistribution?.map((d) => ({
+    label: d.difficulty ?? (d as any).Difficulty ?? "",
+    count: d.count ?? (d as any).Count ?? 0,
+  })) ?? [];
 
   return (
     <div
@@ -180,7 +199,7 @@ const AnalyticsPage = () => {
         </div>
       </header>
 
-      {/* Main */}
+      {/* Main — scrollable */}
       <main className="flex-1 overflow-y-auto">
         <div className="max-w-screen-xl mx-auto px-6 py-8">
 
@@ -204,7 +223,6 @@ const AnalyticsPage = () => {
             )}
           </motion.div>
 
-          {/* Content */}
           {loading && <Skeleton />}
 
           {error && (
@@ -249,25 +267,16 @@ const AnalyticsPage = () => {
               {/* Charts */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <SectionCard title="Top Courses" icon={BookOpen} delay={0.2}>
-                  {stats.topCourses?.length ? (
-                    <BarGroup
-                      items={stats.topCourses.map((c) => ({ label: c.course, count: c.count }))}
-                      max={topCourseMax}
-                    />
+                  {topCourses.length ? (
+                    <BarGroup items={topCourses} max={topCourseMax} />
                   ) : (
                     <p className="text-xs text-stone-400 font-light">No data yet.</p>
                   )}
                 </SectionCard>
 
                 <SectionCard title="Difficulty Distribution" icon={BarChart2} delay={0.25}>
-                  {stats.difficultyDistribution?.length ? (
-                    <BarGroup
-                      items={stats.difficultyDistribution.map((d) => ({
-                        label: d.difficulty,
-                        count: d.count,
-                      }))}
-                      max={diffMax}
-                    />
+                  {diffDist.length ? (
+                    <BarGroup items={diffDist} max={diffMax} />
                   ) : (
                     <p className="text-xs text-stone-400 font-light">No data yet.</p>
                   )}
