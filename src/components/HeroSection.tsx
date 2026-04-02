@@ -14,7 +14,7 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
 
       {/* Navbar */}
       <header className="border-b border-stone-200/80 bg-[#F7F6F3]">
-        <div className="max-w-screen-xl mx-auto flex items-center justify-between px-6 py-3">
+        <div className="max-w-screen-xl mx-auto flex items-center justify-between px-4 sm:px-6 py-3">
           <span
             style={{ fontFamily: "'DM Serif Display', serif" }}
             className="text-base text-stone-900"
@@ -38,7 +38,7 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
 
       {/* Hero body */}
       <section className="flex-1 flex items-center justify-center">
-        <div className="container px-6 py-20 flex flex-col items-center text-center max-w-3xl mx-auto">
+        <div className="container px-4 sm:px-6 py-12 sm:py-20 flex flex-col items-center text-center max-w-3xl mx-auto">
 
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -55,7 +55,7 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
             style={{ fontFamily: "'DM Serif Display', serif" }}
-            className="text-4xl sm:text-5xl tracking-tight text-stone-900 leading-tight"
+            className="text-3xl sm:text-4xl lg:text-5xl tracking-tight text-stone-900 leading-tight"
           >
             Find your perfect{" "}
             <span className="italic text-stone-500">capstone idea</span>
@@ -74,11 +74,11 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.3 }}
-            className="mt-8 flex flex-col sm:flex-row gap-3"
+            className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 w-full sm:w-auto"
           >
             <button
               onClick={onGetStarted}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-stone-900 px-6 py-3 text-sm font-semibold text-white hover:bg-stone-800 transition-colors group"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-xl bg-stone-900 px-6 py-3 text-xs sm:text-sm font-semibold text-white hover:bg-stone-800 transition-colors group"
             >
               Get Started
               <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
@@ -89,7 +89,7 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.5 }}
-            className="mt-16 grid grid-cols-3 gap-6 w-full max-w-lg"
+            className="mt-10 sm:mt-16 grid grid-cols-3 gap-3 sm:gap-6 w-full max-w-lg"
           >
             {[
               { value: "10+", label: "Courses supported" },
@@ -97,8 +97,8 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
               { value: "Free", label: "No sign-up needed" },
             ].map((stat) => (
               <div key={stat.label} className="flex flex-col items-center gap-1">
-                <span style={{ fontFamily: "'DM Serif Display', serif" }} className="text-2xl text-stone-900">{stat.value}</span>
-                <span className="text-xs text-stone-400 font-light">{stat.label}</span>
+                <span style={{ fontFamily: "'DM Serif Display', serif" }} className="text-xl sm:text-2xl text-stone-900">{stat.value}</span>
+                <span className="text-[10px] sm:text-xs text-stone-400 font-light text-center">{stat.label}</span>
               </div>
             ))}
           </motion.div>

@@ -107,8 +107,8 @@ const GeneratorPage = () => {
         </div>
       </header>
 
-      {/* Main — flex-1, no overflow so children control their own scroll */}
-      <main className="flex-1 overflow-hidden max-w-screen-xl w-full mx-auto px-6 py-6 flex flex-col">
+      {/* Main — scrollable on mobile, fixed on desktop */}
+      <main className="flex-1 overflow-y-auto lg:overflow-hidden max-w-screen-xl w-full mx-auto px-4 sm:px-6 py-4 sm:py-6 flex flex-col">
 
         {/* Page heading — shrink-0 */}
         <motion.div
@@ -119,23 +119,23 @@ const GeneratorPage = () => {
         >
           <h2
             style={{ fontFamily: "'DM Serif Display', serif" }}
-            className="text-2xl sm:text-3xl text-stone-900 leading-tight"
+            className="text-xl sm:text-2xl lg:text-3xl text-stone-900 leading-tight"
           >
             Describe your project
           </h2>
-          <p className="mt-1 text-xs text-stone-500 font-light">
+          <p className="mt-1 text-[11px] sm:text-xs text-stone-500 font-light">
             Fill in the details below and we'll generate a tailored capstone proposal.
           </p>
         </motion.div>
 
-        {/* Two-column row — flex-1 so it fills remaining height */}
-        <div className="flex-1 overflow-hidden flex gap-6 min-h-0">
+        {/* Two-column row — flex-1 on desktop, auto on mobile */}
+        <div className="lg:flex-1 lg:overflow-hidden flex flex-col lg:flex-row gap-3 sm:gap-6 lg:min-h-0">
 
           {/* Form column — fixed width when split, centered when alone */}
           <motion.div
             layout
             transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
-            className="min-h-0 flex flex-col"
+            className={`lg:min-h-0 flex flex-col ${hasSubmitted ? "hidden lg:flex" : ""}`}
             style={{
               width: "100%",
               maxWidth: hasSubmitted ? "480px" : "672px",
@@ -153,7 +153,7 @@ const GeneratorPage = () => {
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="shrink-0 mt-3 p-3 rounded-xl border border-red-200 bg-red-50 text-red-600 text-xs font-light"
+                className="shrink-0 mt-2 sm:mt-3 p-2 sm:p-3 rounded-lg sm:rounded-xl border border-red-200 bg-red-50 text-red-600 text-[11px] sm:text-xs font-light"
               >
                 {error}
               </motion.div>
@@ -194,9 +194,9 @@ const GeneratorPage = () => {
           </AnimatePresence>
         </div>
 
-        {/* Mobile: result below form, scrollable */}
+        {/* Mobile: result below form */}
         {hasSubmitted && (
-          <div className="shrink-0 mt-6 lg:hidden overflow-y-auto">
+          <div className="shrink-0 mt-4 sm:mt-6 lg:hidden w-full">
             <AnimatePresence mode="wait">
               {isLoading && (
                 <motion.div key="loader-sm" exit={{ opacity: 0 }}>

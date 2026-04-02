@@ -37,13 +37,13 @@ const PillGroup = ({
   value: string;
   onChange: (v: string) => void;
 }) => (
-  <div className="flex flex-wrap gap-2">
+  <div className="flex flex-wrap gap-1.5 sm:gap-2">
     {options.map((opt) => (
       <button
         key={opt}
         type="button"
         onClick={() => onChange(opt)}
-        className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
+        className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-medium border transition-all ${
           value === opt
             ? "bg-stone-900 text-white border-stone-900"
             : "bg-white text-stone-600 border-stone-200 hover:border-stone-300 hover:bg-stone-50"
@@ -56,7 +56,7 @@ const PillGroup = ({
 );
 
 const inputClass =
-  "w-full rounded-xl border border-stone-200 bg-white px-3.5 py-2.5 text-sm text-stone-800 placeholder-stone-400 font-light outline-none transition-all hover:border-stone-300 focus:border-stone-400 focus:ring-2 focus:ring-stone-200";
+  "w-full rounded-lg sm:rounded-xl border border-stone-200 bg-white px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm text-stone-800 placeholder-stone-400 font-light outline-none transition-all hover:border-stone-300 focus:border-stone-400 focus:ring-2 focus:ring-stone-200";
 
 const GeneratorForm = ({ onSubmit, isLoading }: GeneratorFormProps) => {
   const [course, setCourse] = useState("");
@@ -80,7 +80,7 @@ const GeneratorForm = ({ onSubmit, isLoading }: GeneratorFormProps) => {
       className="flex flex-col h-full rounded-2xl border border-stone-200 bg-white shadow-sm overflow-hidden"
     >
       {/* Pinned header */}
-      <div className="shrink-0 px-6 py-4 border-b border-stone-100 bg-stone-50">
+      <div className="shrink-0 px-4 sm:px-6 py-3 sm:py-4 border-b border-stone-100 bg-stone-50">
         <p className="text-[11px] font-semibold tracking-widest text-stone-400 uppercase mb-0.5">
           Project Details
         </p>
@@ -88,7 +88,7 @@ const GeneratorForm = ({ onSubmit, isLoading }: GeneratorFormProps) => {
       </div>
 
       {/* Scrollable fields — fills remaining space */}
-      <div className="flex-1 overflow-y-auto px-6 py-5 space-y-4">
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-5 space-y-3 sm:space-y-4">
         <Field label="Course / Discipline">
           <input
             type="text"
@@ -142,11 +142,11 @@ const GeneratorForm = ({ onSubmit, isLoading }: GeneratorFormProps) => {
       </div>
 
       {/* Pinned footer */}
-      <div className="shrink-0 px-6 py-4 border-t border-stone-100 bg-stone-50">
+      <div className="shrink-0 px-4 sm:px-6 py-3 sm:py-4 border-t border-stone-100 bg-stone-50">
         <button
           type="submit"
           disabled={!isValid || isLoading}
-          className="w-full flex items-center justify-center gap-2 rounded-xl bg-stone-900 px-5 py-3 text-sm font-semibold text-white hover:bg-stone-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-2 rounded-lg sm:rounded-xl bg-stone-900 px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white hover:bg-stone-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {isLoading ? (
             <>

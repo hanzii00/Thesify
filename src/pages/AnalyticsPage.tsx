@@ -44,35 +44,35 @@ const StatCard = ({
     initial={{ opacity: 0, y: 12 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.4, delay }}
-    className="rounded-2xl border border-stone-200 bg-white p-5 shadow-sm flex flex-col gap-3"
+    className="rounded-lg sm:rounded-2xl border border-stone-200 bg-white p-3.5 sm:p-5 shadow-sm flex flex-col gap-2 sm:gap-3"
   >
     <div className="flex items-center justify-between">
-      <span className="text-[11px] font-semibold tracking-widest text-stone-400 uppercase">{label}</span>
-      <span className="h-7 w-7 rounded-lg bg-stone-100 flex items-center justify-center">
-        <Icon className="h-3.5 w-3.5 text-stone-500" />
+      <span className="text-[10px] sm:text-[11px] font-semibold tracking-widest text-stone-400 uppercase">{label}</span>
+      <span className="h-6 sm:h-7 w-6 sm:w-7 rounded-lg bg-stone-100 flex items-center justify-center">
+        <Icon className="h-3 sm:h-3.5 w-3 sm:w-3.5 text-stone-500" />
       </span>
     </div>
     <div>
-      <p className="text-3xl font-light text-stone-900" style={{ fontFamily: "'DM Serif Display', serif" }}>
+      <p className="text-2xl sm:text-3xl font-light text-stone-900" style={{ fontFamily: "'DM Serif Display', serif" }}>
         {value}
       </p>
-      {sub && <p className="text-xs text-stone-400 font-light mt-0.5">{sub}</p>}
+      {sub && <p className="text-[10px] sm:text-xs text-stone-400 font-light mt-0.5">{sub}</p>}
     </div>
   </motion.div>
 );
 
 // ─── Bar Chart (CSS-only) ─────────────────────────────────────────────────────
 const BarGroup = ({ items, max }: { items: { label: string; count: number }[]; max: number }) => (
-  <div className="space-y-2.5">
+  <div className="space-y-2">
     {items.map((item, i) => (
       <motion.div
         key={item.label}
         initial={{ opacity: 0, x: -8 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.35, delay: 0.05 * i }}
-        className="flex items-center gap-3"
+        className="flex items-center gap-2 sm:gap-3"
       >
-        <span className="text-xs text-stone-500 font-light w-36 shrink-0 truncate" title={item.label}>
+        <span className="text-[11px] sm:text-xs text-stone-500 font-light w-24 sm:w-36 shrink-0 truncate" title={item.label}>
           {item.label}
         </span>
         <div className="flex-1 h-2 rounded-full bg-stone-100 overflow-hidden">
@@ -83,7 +83,7 @@ const BarGroup = ({ items, max }: { items: { label: string; count: number }[]; m
             className="h-full rounded-full bg-stone-800"
           />
         </div>
-        <span className="text-xs text-stone-400 font-light w-6 text-right shrink-0">{item.count}</span>
+        <span className="text-[10px] sm:text-xs text-stone-400 font-light w-5 sm:w-6 text-right shrink-0">{item.count}</span>
       </motion.div>
     ))}
   </div>
@@ -105,27 +105,27 @@ const SectionCard = ({
     initial={{ opacity: 0, y: 12 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.4, delay }}
-    className="rounded-2xl border border-stone-200 bg-white shadow-sm overflow-hidden"
+    className="rounded-lg sm:rounded-2xl border border-stone-200 bg-white shadow-sm overflow-hidden"
   >
-    <div className="px-5 py-4 border-b border-stone-100 bg-stone-50 flex items-center gap-2">
-      <Icon className="h-3.5 w-3.5 text-stone-400" />
-      <span className="text-[11px] font-semibold tracking-widest text-stone-400 uppercase">{title}</span>
+    <div className="px-3.5 sm:px-5 py-3 sm:py-4 border-b border-stone-100 bg-stone-50 flex items-center gap-2">
+      <Icon className="h-3 sm:h-3.5 w-3 sm:w-3.5 text-stone-400" />
+      <span className="text-[10px] sm:text-[11px] font-semibold tracking-widest text-stone-400 uppercase">{title}</span>
     </div>
-    <div className="p-5">{children}</div>
+    <div className="p-3.5 sm:p-5">{children}</div>
   </motion.div>
 );
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
 const Skeleton = () => (
-  <div className="space-y-6">
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+  <div className="space-y-4 sm:space-y-6">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
       {[...Array(4)].map((_, i) => (
-        <div key={i} className="rounded-2xl border border-stone-200 bg-white p-5 h-28 animate-pulse" />
+        <div key={i} className="rounded-lg sm:rounded-2xl border border-stone-200 bg-white p-3.5 sm:p-5 h-24 sm:h-28 animate-pulse" />
       ))}
     </div>
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
       {[...Array(2)].map((_, i) => (
-        <div key={i} className="rounded-2xl border border-stone-200 bg-white h-48 animate-pulse" />
+        <div key={i} className="rounded-lg sm:rounded-2xl border border-stone-200 bg-white h-40 sm:h-48 animate-pulse" />
       ))}
     </div>
   </div>
@@ -185,13 +185,13 @@ const AnalyticsPage = () => {
 
       {/* Navbar */}
       <header className="shrink-0 border-b border-stone-200/80 bg-[#F7F6F3]/90 backdrop-blur-md z-50">
-        <div className="max-w-screen-xl mx-auto flex items-center justify-between px-6 py-3">
+        <div className="max-w-screen-xl mx-auto flex items-center justify-between px-4 sm:px-6 py-3">
           <a
             href="/"
-            className="flex items-center gap-2 text-stone-700 hover:text-stone-900 transition-colors text-sm font-medium group"
+            className="flex items-center gap-2 text-stone-700 hover:text-stone-900 transition-colors text-xs sm:text-sm font-medium group"
           >
-            <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
-            <span style={{ fontFamily: "'DM Serif Display', serif" }} className="text-base">Thesify</span>
+            <ArrowLeft className="h-3 sm:h-3.5 w-3 sm:w-3.5 group-hover:-translate-x-0.5 transition-transform" />
+            <span style={{ fontFamily: "'DM Serif Display', serif" }} className="text-sm sm:text-base">Thesify</span>
           </a>
           <span className="text-xs font-medium text-stone-500 bg-white border border-stone-200 px-3 py-1 rounded-full shadow-sm">
             Analytics
@@ -201,23 +201,23 @@ const AnalyticsPage = () => {
 
       {/* Main — scrollable */}
       <main className="flex-1 overflow-y-auto">
-        <div className="max-w-screen-xl mx-auto px-6 py-8">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
 
           {/* Heading */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="mb-7"
+            className="mb-6 sm:mb-7"
           >
             <h2
               style={{ fontFamily: "'DM Serif Display', serif" }}
-              className="text-3xl text-stone-900"
+              className="text-2xl sm:text-3xl text-stone-900"
             >
               Analytics
             </h2>
             {stats && (
-              <p className="mt-1 text-xs text-stone-400 font-light">
+              <p className="mt-1 text-[10px] sm:text-xs text-stone-400 font-light">
                 Last updated {new Date(stats.generatedAt).toLocaleString()}
               </p>
             )}
@@ -226,7 +226,7 @@ const AnalyticsPage = () => {
           {loading && <Skeleton />}
 
           {error && (
-            <div className="rounded-xl border border-red-200 bg-red-50 text-red-600 text-sm font-light p-4">
+            <div className="rounded-lg sm:rounded-xl border border-red-200 bg-red-50 text-red-600 text-[11px] sm:text-sm font-light p-3 sm:p-4">
               {error}
             </div>
           )}
@@ -235,7 +235,7 @@ const AnalyticsPage = () => {
             <div className="space-y-4">
 
               {/* Stat cards */}
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <StatCard
                   label="Total Generations"
                   value={stats.totalGenerations}
@@ -265,7 +265,7 @@ const AnalyticsPage = () => {
               </div>
 
               {/* Charts */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
                 <SectionCard title="Top Courses" icon={BookOpen} delay={0.2}>
                   {topCourses.length ? (
                     <BarGroup items={topCourses} max={topCourseMax} />

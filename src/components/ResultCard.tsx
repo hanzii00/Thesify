@@ -348,34 +348,34 @@ const ResultCard = ({ result, onRegenerate, isLoading }: ResultCardProps) => {
       className="w-full"
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
-      <div className="rounded-2xl border border-stone-200 bg-white shadow-sm overflow-hidden">
+      <div className="rounded-lg sm:rounded-2xl border border-stone-200 bg-white shadow-sm overflow-hidden">
         {/* Header */}
-        <div className="px-6 py-5 border-b border-stone-100 bg-stone-50">
-          <p className="text-xs font-semibold tracking-widest text-stone-400 uppercase mb-1.5">
+        <div className="px-4 sm:px-6 py-4 sm:py-5 border-b border-stone-100 bg-stone-50">
+          <p className="text-[10px] sm:text-xs font-semibold tracking-widest text-stone-400 uppercase mb-1.5">
             Generated Proposal
           </p>
           <h3
-            className="text-xl font-semibold text-stone-900 leading-snug"
+            className="text-lg sm:text-xl font-semibold text-stone-900 leading-snug line-clamp-2"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
             {result.title}
           </h3>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
           {/* Description */}
           <section>
-            <h4 className="text-[11px] font-semibold text-stone-400 uppercase tracking-widest mb-2">
+            <h4 className="text-[10px] sm:text-[11px] font-semibold text-stone-400 uppercase tracking-widest mb-2">
               Description
             </h4>
-            <p className="text-stone-700 text-sm leading-relaxed font-light">{result.description}</p>
+            <p className="text-stone-700 text-xs sm:text-sm leading-relaxed font-light">{result.description}</p>
           </section>
 
           <div className="border-t border-stone-100" />
 
           {/* Features */}
           <section>
-            <h4 className="text-[11px] font-semibold text-stone-400 uppercase tracking-widest mb-3">
+            <h4 className="text-[10px] sm:text-[11px] font-semibold text-stone-400 uppercase tracking-widest mb-3">
               Key Features
             </h4>
             <ul className="space-y-2">
@@ -385,9 +385,9 @@ const ResultCard = ({ result, onRegenerate, isLoading }: ResultCardProps) => {
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.07 * i, duration: 0.3 }}
-                  className="flex items-start gap-2.5 text-stone-700 text-sm"
+                  className="flex items-start gap-2 sm:gap-2.5 text-stone-700 text-xs sm:text-sm"
                 >
-                  <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-stone-400 shrink-0" />
+                  <span className="mt-1 sm:mt-1.5 h-1 sm:h-1.5 w-1 sm:w-1.5 rounded-full bg-stone-400 shrink-0" />
                   <span className="font-light leading-relaxed">{feature}</span>
                 </motion.li>
               ))}
@@ -398,14 +398,14 @@ const ResultCard = ({ result, onRegenerate, isLoading }: ResultCardProps) => {
 
           {/* Tech Stack */}
           <section>
-            <h4 className="text-[11px] font-semibold text-stone-400 uppercase tracking-widest mb-3">
+            <h4 className="text-[10px] sm:text-[11px] font-semibold text-stone-400 uppercase tracking-widest mb-3">
               Tech Stack
             </h4>
-            <div className="flex flex-wrap gap-1.5">
+            <div className="flex flex-wrap gap-1 sm:gap-1.5">
               {result.techStack.map((tech) => (
                 <span
                   key={tech}
-                  className="px-2.5 py-1 rounded-md bg-stone-100 text-stone-600 text-xs font-medium border border-stone-200"
+                  className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-stone-100 text-stone-600 text-[10px] sm:text-xs font-medium border border-stone-200"
                 >
                   {tech}
                 </span>
@@ -418,58 +418,60 @@ const ResultCard = ({ result, onRegenerate, isLoading }: ResultCardProps) => {
             <>
               <div className="border-t border-stone-100" />
               <section>
-                <h4 className="text-[11px] font-semibold text-stone-400 uppercase tracking-widest mb-2">
+                <h4 className="text-[10px] sm:text-[11px] font-semibold text-stone-400 uppercase tracking-widest mb-2">
                   Methodology
                 </h4>
-                <p className="text-stone-700 text-sm leading-relaxed font-light">{result.methodology}</p>
+                <p className="text-stone-700 text-xs sm:text-sm leading-relaxed font-light">{result.methodology}</p>
               </section>
             </>
           )}
         </div>
 
         {/* Actions */}
-        <div className="px-6 py-4 border-t border-stone-100 bg-stone-50 flex flex-wrap gap-2">
+        <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-stone-100 bg-stone-50 flex flex-wrap gap-2">
           <button
             onClick={onRegenerate}
             disabled={isLoading}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-stone-900 text-white text-xs font-medium hover:bg-stone-800 transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg bg-stone-900 text-white text-xs font-medium hover:bg-stone-800 transition-colors disabled:opacity-50"
           >
-            <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />
+            <RefreshCw className={`h-3 sm:h-3.5 w-3 sm:w-3.5 ${isLoading ? "animate-spin" : ""}`} />
             Regenerate
           </button>
 
           <button
             onClick={handleCopy}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-stone-200 bg-white text-stone-600 text-xs font-medium hover:bg-stone-50 transition-colors"
+            className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg border border-stone-200 bg-white text-stone-600 text-xs font-medium hover:bg-stone-50 transition-colors"
           >
-            <Copy className="h-3.5 w-3.5" />
+            <Copy className="h-3 sm:h-3.5 w-3 sm:w-3.5" />
             {copied ? "Copied" : "Copy"}
           </button>
 
           <button
             onClick={handleDownloadWord}
             disabled={isDownloadingWord}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-stone-200 bg-white text-stone-600 text-xs font-medium hover:bg-stone-50 transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg border border-stone-200 bg-white text-stone-600 text-xs font-medium hover:bg-stone-50 transition-colors disabled:opacity-50"
           >
             {isDownloadingWord ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              <Loader2 className="h-3 sm:h-3.5 w-3 sm:w-3.5 animate-spin" />
             ) : (
-              <Download className="h-3.5 w-3.5" />
+              <Download className="h-3 sm:h-3.5 w-3 sm:w-3.5" />
             )}
-            {isDownloadingWord ? "Generating..." : "Proposal (.docx)"}
+            <span className="hidden sm:inline">{isDownloadingWord ? "Generating..." : "Proposal (.docx)"}</span>
+            <span className="sm:hidden">{isDownloadingWord ? "Gen..." : "Proposal"}</span>
           </button>
 
           <button
             onClick={handleGenerateResearchPaper}
             disabled={isGeneratingPaper}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg border border-stone-200 bg-white text-stone-600 text-xs font-medium hover:bg-stone-50 transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg border border-stone-200 bg-white text-stone-600 text-xs font-medium hover:bg-stone-50 transition-colors disabled:opacity-50"
           >
             {isGeneratingPaper ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              <Loader2 className="h-3 sm:h-3.5 w-3 sm:w-3.5 animate-spin" />
             ) : (
-              <FileText className="h-3.5 w-3.5" />
+              <FileText className="h-3 sm:h-3.5 w-3 sm:w-3.5" />
             )}
-            {isGeneratingPaper ? "Writing..." : "Research Paper (.docx)"}
+            <span className="hidden sm:inline">{isGeneratingPaper ? "Writing..." : "Research Paper (.docx)"}</span>
+            <span className="sm:hidden">{isGeneratingPaper ? "Writing..." : "Paper"}</span>
           </button>
         </div>
       </div>
