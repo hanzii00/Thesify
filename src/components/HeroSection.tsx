@@ -1,11 +1,14 @@
-import { motion } from "framer-motion";
-import { Sparkles, ArrowRight, BarChart2 } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Sparkles, ArrowRight, BarChart2, Info, Github, X } from "lucide-react";
 
 interface HeroSectionProps {
   onGetStarted: () => void;
 }
 
 const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
+  const [showAbout, setShowAbout] = useState(false);
+
   return (
     <div className="min-h-screen flex flex-col bg-[#F7F6F3]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
       <style>{`
@@ -29,12 +32,77 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
               <BarChart2 className="h-3.5 w-3.5" />
               Analytics
             </a>
+            <button
+              onClick={() => setShowAbout(true)}
+              className="flex items-center gap-1.5 text-xs font-medium text-stone-500 hover:text-stone-800 transition-colors"
+            >
+              <Info className="h-3.5 w-3.5" />
+              About
+            </button>
             <span className="text-xs font-medium text-stone-500 bg-white border border-stone-200 px-3 py-1 rounded-full shadow-sm">
               Beta
             </span>
           </div>
         </div>
       </header>
+
+      {/* About Modal */}
+      <AnimatePresence>
+        {showAbout && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm px-4"
+            onClick={() => setShowAbout(false)}
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 16, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 16, scale: 0.97 }}
+              transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-white rounded-2xl border border-stone-200 shadow-xl w-full max-w-sm p-6 relative"
+            >
+              <button
+                onClick={() => setShowAbout(false)}
+                className="absolute top-4 right-4 text-stone-400 hover:text-stone-600 transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+
+              <h2
+                style={{ fontFamily: "'DM Serif Display', serif" }}
+                className="text-xl text-stone-900 mb-1"
+              >
+                About Thesify
+              </h2>
+              <p className="text-xs text-stone-400 font-light mb-6">
+                An AI-powered capstone idea generator built for students.
+              </p>
+
+              <div className="border-t border-stone-100 pt-5">
+                <p className="text-[10px] uppercase tracking-widest text-stone-400 font-medium mb-3">Developer</p>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-stone-800 font-mono">.... .- -. --.. / -.-. .... . ... - . .-. / -... .- -.-. ..- ...</p>
+                    <p className="text-xs text-stone-400 font-light mt-0.5">Creator & Developer</p>
+                  </div>
+                  <a
+                    href="https://github.com/hanzii00"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-xs font-medium text-stone-500 hover:text-stone-900 border border-stone-200 hover:border-stone-400 rounded-lg px-3 py-1.5 transition-all"
+                  >
+                    <Github className="h-3.5 w-3.5" />
+                    GitHub
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Hero body */}
       <section className="flex-1 flex items-center justify-center">
