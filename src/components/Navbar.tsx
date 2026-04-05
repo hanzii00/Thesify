@@ -10,20 +10,6 @@ interface NavbarProps {
 
 const serifFont = { fontFamily: "'DM Serif Display', serif" };
 
-const ThemeToggle = () => {
-  const { theme, toggleTheme } = useTheme();
-  const isDark = theme === "dark";
-  return (
-    <button
-      onClick={toggleTheme}
-      aria-label="Toggle theme"
-      className="flex items-center justify-center h-7 w-7 rounded-lg border border-stone-200 bg-white text-stone-500 hover:text-stone-800 hover:border-stone-300 transition-all dark:bg-stone-800 dark:border-stone-700 dark:text-stone-400 dark:hover:text-stone-200 dark:hover:border-stone-600"
-    >
-      {isDark ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
-    </button>
-  );
-};
-
 const Badge = ({ label }: { label: string }) => (
   <span className="text-xs font-medium text-stone-500 bg-white border border-stone-200 px-3 py-1 rounded-full shadow-sm dark:bg-stone-800 dark:border-stone-700 dark:text-stone-400">
     {label}
@@ -57,8 +43,8 @@ const Navbar = ({ variant, onAbout }: NavbarProps) => {
               <Info className="h-3.5 w-3.5" />
               About
             </button>
+            
             <Badge label="Beta" />
-            <ThemeToggle />
           </div>
         </div>
       </header>
@@ -75,7 +61,6 @@ const Navbar = ({ variant, onAbout }: NavbarProps) => {
           </a>
           <div className="flex items-center gap-3">
             <Badge label="Idea Generator" />
-            <ThemeToggle />
           </div>
         </div>
       </header>
@@ -91,7 +76,6 @@ const Navbar = ({ variant, onAbout }: NavbarProps) => {
         </a>
         <div className="flex items-center gap-3">
           <Badge label="Analytics" />
-          <ThemeToggle />
         </div>
       </div>
     </header>
