@@ -58,7 +58,7 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-stone-800 dark:text-stone-200 font-mono">
-                      You will know who I am soon...
+                      Hanzii00
                     </p>
                     <p className="text-xs text-stone-400 font-light mt-0.5">Creator & Developer</p>
                   </div>
