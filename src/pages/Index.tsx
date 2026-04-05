@@ -19,7 +19,7 @@ const Index = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <GeneratorPage />
+          <GeneratorPage onBack={() => setShowGenerator(false)} />
         </motion.div>
       )}
     </AnimatePresence>

@@ -6,6 +6,7 @@ export type NavbarVariant = "hero" | "generator" | "analytics" | "reviews";
 interface NavbarProps {
   variant: NavbarVariant;
   onAbout?: () => void;
+  onBack?: () => void;
 }
 
 const serifFont = { fontFamily: "'DM Serif Display', serif" };
@@ -24,7 +25,7 @@ const arrowClass = "group-hover:-translate-x-0.5 transition-transform";
 const navLinkClass =
   "flex items-center gap-1.5 text-xs font-medium text-stone-500 hover:text-stone-800 transition-colors dark:text-stone-400 dark:hover:text-stone-200";
 
-const Navbar = ({ variant, onAbout }: NavbarProps) => {
+const Navbar = ({ variant, onAbout, onBack }: NavbarProps) => {
   if (variant === "hero") {
     return (
       <header className="border-b border-stone-200/80 bg-[#F7F6F3] dark:bg-stone-900 dark:border-stone-800">
@@ -56,21 +57,11 @@ const Navbar = ({ variant, onAbout }: NavbarProps) => {
     return (
       <header className={sharedHeaderClass}>
         <div className="max-w-screen-xl mx-auto flex items-center justify-between px-6 py-3">
-          <Link to="/" className={backLinkClass}>
+          <button onClick={onBack} className={backLinkClass}>
             <ArrowLeft className={`${arrowClass} h-3.5 w-3.5`} />
             <span style={serifFont} className="text-base">Thesify</span>
-          </Link>
-          <div className="flex items-center gap-3">
-            <Link to="/analytics" className={navLinkClass}>
-              <BarChart2 className="h-3.5 w-3.5" />
-              Analytics
-            </Link>
-            <Link to="/reviews" className={navLinkClass}>
-              <MessageSquare className="h-3.5 w-3.5" />
-              Reviews
-            </Link>
-            <Badge label="Idea Generator" />
-          </div>
+          </button>
+          <Badge label="Idea Generator" />
         </div>
       </header>
     );
