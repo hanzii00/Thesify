@@ -4,6 +4,7 @@ import { ArrowLeft, BarChart2 } from "lucide-react";
 import GeneratorForm, { type GeneratorFormData } from "@/components/GeneratorForm";
 import ResultCard, { type CapstoneResult } from "@/components/ResultCard";
 import SkeletonLoader from "@/components/SkeletonLoader";
+import Navbar from "@/components/Navbar";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -81,31 +82,12 @@ const GeneratorPage = () => {
 
   return (
     // Lock the whole page to the viewport — no page scroll
-    <div
-      className="h-screen flex flex-col bg-[#F7F6F3] overflow-hidden"
-      style={{ fontFamily: "'DM Sans', sans-serif" }}
-    >
+    <div className="h-screen flex flex-col bg-[#F7F6F3] dark:bg-[#0F0F0F] overflow-hidden">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap');
       `}</style>
 
-      {/* Navbar — pinned, shrink-0 */}
-      <header className="shrink-0 border-b border-stone-200/80 bg-[#F7F6F3]/90 backdrop-blur-md z-50">
-        <div className="max-w-screen-xl mx-auto flex items-center justify-between h-13 px-6 py-3">
-          <a
-            href="/"
-            className="flex items-center gap-2 text-stone-700 hover:text-stone-900 transition-colors text-sm font-medium group"
-          >
-            <ArrowLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
-            <span style={{ fontFamily: "'DM Serif Display', serif" }} className="text-base">Thesify</span>
-          </a>
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-medium text-stone-500 bg-white border border-stone-200 px-3 py-1 rounded-full shadow-sm">
-              Idea Generator
-            </span>
-          </div>
-        </div>
-      </header>
+     <Navbar variant="generator" />
 
       {/* Main — scrollable on mobile, fixed on desktop */}
       <main className="flex-1 overflow-y-auto lg:overflow-hidden max-w-screen-xl w-full mx-auto px-4 sm:px-6 py-4 sm:py-6 flex flex-col">
@@ -119,7 +101,7 @@ const GeneratorPage = () => {
         >
           <h2
             style={{ fontFamily: "'DM Serif Display', serif" }}
-            className="text-xl sm:text-2xl lg:text-3xl text-stone-900 leading-tight"
+            className="text-xl sm:text-2xl lg:text-3xl text-stone-900 dark:text-white leading-tight"
           >
             Describe your project
           </h2>

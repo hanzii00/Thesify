@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, TrendingUp, CheckCircle, XCircle, Clock, BarChart2, BookOpen } from "lucide-react";
+import Navbar from "@/components/Navbar";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -183,21 +184,8 @@ const AnalyticsPage = () => {
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap');
       `}</style>
 
-      {/* Navbar */}
-      <header className="shrink-0 border-b border-stone-200/80 bg-[#F7F6F3]/90 backdrop-blur-md z-50">
-        <div className="max-w-screen-xl mx-auto flex items-center justify-between px-4 sm:px-6 py-3">
-          <a
-            href="/"
-            className="flex items-center gap-2 text-stone-700 hover:text-stone-900 transition-colors text-xs sm:text-sm font-medium group"
-          >
-            <ArrowLeft className="h-3 sm:h-3.5 w-3 sm:w-3.5 group-hover:-translate-x-0.5 transition-transform" />
-            <span style={{ fontFamily: "'DM Serif Display', serif" }} className="text-sm sm:text-base">Thesify</span>
-          </a>
-          <span className="text-xs font-medium text-stone-500 bg-white border border-stone-200 px-3 py-1 rounded-full shadow-sm">
-            Analytics
-          </span>
-        </div>
-      </header>
+      <Navbar variant="analytics" />
+
 
       {/* Main — scrollable */}
       <main className="flex-1 overflow-y-auto">

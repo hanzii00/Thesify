@@ -21,8 +21,12 @@ const BUDGETS = ["Free / No budget", "Under ₱5,000", "₱5,000–₱20,000", "
 const Field = ({ label, children, optional }: { label: string; children: React.ReactNode; optional?: boolean }) => (
   <div className="space-y-1.5">
     <div className="flex items-center gap-1.5">
-      <label className="text-[11px] font-semibold tracking-widest text-stone-400 uppercase">{label}</label>
-      {optional && <span className="text-[10px] text-stone-300 font-medium">optional</span>}
+      <label className="text-[11px] font-semibold tracking-widest text-stone-400 dark:text-stone-500 uppercase">
+        {label}
+      </label>
+      {optional && (
+        <span className="text-[10px] text-stone-300 dark:text-stone-600 font-medium">optional</span>
+      )}
     </div>
     {children}
   </div>
@@ -45,8 +49,8 @@ const PillGroup = ({
         onClick={() => onChange(opt)}
         className={`px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-medium border transition-all ${
           value === opt
-            ? "bg-stone-900 text-white border-stone-900"
-            : "bg-white text-stone-600 border-stone-200 hover:border-stone-300 hover:bg-stone-50"
+            ? "bg-stone-900 text-white border-stone-900 dark:bg-stone-100 dark:text-stone-900 dark:border-stone-100"
+            : "bg-white text-stone-600 border-stone-200 hover:border-stone-300 hover:bg-stone-50 dark:bg-stone-800 dark:text-stone-300 dark:border-stone-700 dark:hover:border-stone-500 dark:hover:bg-stone-700"
         }`}
       >
         {opt}
@@ -56,7 +60,7 @@ const PillGroup = ({
 );
 
 const inputClass =
-  "w-full rounded-lg sm:rounded-xl border border-stone-200 bg-white px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm text-stone-800 placeholder-stone-400 font-light outline-none transition-all hover:border-stone-300 focus:border-stone-400 focus:ring-2 focus:ring-stone-200";
+  "w-full rounded-lg sm:rounded-xl border border-stone-200 bg-white px-3 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm text-stone-800 placeholder-stone-400 font-light outline-none transition-all hover:border-stone-300 focus:border-stone-400 focus:ring-2 focus:ring-stone-200 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-100 dark:placeholder-stone-500 dark:hover:border-stone-600 dark:focus:border-stone-500 dark:focus:ring-stone-700";
 
 const GeneratorForm = ({ onSubmit, isLoading }: GeneratorFormProps) => {
   const [course, setCourse] = useState("");
@@ -74,20 +78,21 @@ const GeneratorForm = ({ onSubmit, isLoading }: GeneratorFormProps) => {
   const isValid = course.trim() && interests.trim();
 
   return (
-    // h-full so it fills whatever height the parent gives it
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col h-full rounded-2xl border border-stone-200 bg-white shadow-sm overflow-hidden"
+      className="flex flex-col h-full rounded-2xl border border-stone-200 bg-white shadow-sm overflow-hidden dark:border-stone-700 dark:bg-stone-900"
     >
       {/* Pinned header */}
-      <div className="shrink-0 px-4 sm:px-6 py-3 sm:py-4 border-b border-stone-100 bg-stone-50">
-        <p className="text-[11px] font-semibold tracking-widest text-stone-400 uppercase mb-0.5">
+      <div className="shrink-0 px-4 sm:px-6 py-3 sm:py-4 border-b border-stone-100 bg-stone-50 dark:border-stone-800 dark:bg-stone-800/60">
+        <p className="text-[11px] font-semibold tracking-widest text-stone-400 dark:text-stone-500 uppercase mb-0.5">
           Project Details
         </p>
-        <p className="text-xs text-stone-400 font-light">Tell us what you're working with</p>
+        <p className="text-xs text-stone-400 dark:text-stone-500 font-light">
+          Tell us what you're working with
+        </p>
       </div>
 
-      {/* Scrollable fields — fills remaining space */}
+      {/* Scrollable fields */}
       <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-5 space-y-3 sm:space-y-4">
         <Field label="Course / Discipline">
           <input
@@ -142,15 +147,15 @@ const GeneratorForm = ({ onSubmit, isLoading }: GeneratorFormProps) => {
       </div>
 
       {/* Pinned footer */}
-      <div className="shrink-0 px-4 sm:px-6 py-3 sm:py-4 border-t border-stone-100 bg-stone-50">
+      <div className="shrink-0 px-4 sm:px-6 py-3 sm:py-4 border-t border-stone-100 bg-stone-50 dark:border-stone-800 dark:bg-stone-800/60">
         <button
           type="submit"
           disabled={!isValid || isLoading}
-          className="w-full flex items-center justify-center gap-2 rounded-lg sm:rounded-xl bg-stone-900 px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white hover:bg-stone-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-2 rounded-lg sm:rounded-xl bg-stone-900 px-4 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white hover:bg-stone-800 transition-colors disabled:opacity-40 disabled:cursor-not-allowed dark:bg-stone-100 dark:text-stone-900 dark:hover:bg-stone-200"
         >
           {isLoading ? (
             <>
-              <span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+              <span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin dark:border-stone-900/30 dark:border-t-stone-900" />
               Generating...
             </>
           ) : (
