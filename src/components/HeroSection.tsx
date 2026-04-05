@@ -58,12 +58,12 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-stone-800 dark:text-stone-200 font-mono">
-                      .... .- -. --.. / -.-. .... . ... - . .-. / -... .- -.-. ..- ...
+                      You will know who I am soon...
                     </p>
                     <p className="text-xs text-stone-400 font-light mt-0.5">Creator & Developer</p>
                   </div>
                   <a
-                    href="https://github.com/hanzii00"
+                    href="https://github.com/secretfornow"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1.5 text-xs font-medium text-stone-500 hover:text-stone-900 border border-stone-200 hover:border-stone-400 rounded-lg px-3 py-1.5 transition-all dark:text-stone-400 dark:hover:text-stone-100 dark:border-stone-700 dark:hover:border-stone-500"
