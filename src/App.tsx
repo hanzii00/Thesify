@@ -9,6 +9,7 @@ import { Moon, Sun } from "lucide-react";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import AnalyticsPage from "./pages/AnalyticsPage.tsx";
+import ReviewsPage from "./pages/ReviewsPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/analytics" element={<AnalyticsPage />} />
+              <Route path="/reviews" element={<ReviewsPage />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

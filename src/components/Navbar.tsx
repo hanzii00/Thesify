@@ -1,7 +1,7 @@
-import { ArrowLeft, BarChart2, Info, Moon, Sun } from "lucide-react";
-import { useTheme } from "@/context/ThemeContext";
+import { ArrowLeft, BarChart2, Info, MessageSquare } from "lucide-react";
+import { Link } from "react-router-dom";
 
-export type NavbarVariant = "hero" | "generator" | "analytics";
+export type NavbarVariant = "hero" | "generator" | "analytics" | "reviews";
 
 interface NavbarProps {
   variant: NavbarVariant;
@@ -16,9 +16,13 @@ const Badge = ({ label }: { label: string }) => (
   </span>
 );
 
-const sharedHeaderClass = "shrink-0 border-b border-stone-200/80 bg-[#F7F6F3]/90 backdrop-blur-md z-50 dark:bg-stone-900/90 dark:border-stone-800";
-const backLinkClass = "flex items-center gap-2 font-medium transition-colors group text-stone-700 hover:text-stone-900 dark:text-stone-300 dark:hover:text-stone-100";
+const sharedHeaderClass =
+  "shrink-0 border-b border-stone-200/80 bg-[#F7F6F3]/90 backdrop-blur-md z-50 dark:bg-stone-900/90 dark:border-stone-800";
+const backLinkClass =
+  "flex items-center gap-2 font-medium transition-colors group text-stone-700 hover:text-stone-900 dark:text-stone-300 dark:hover:text-stone-100";
 const arrowClass = "group-hover:-translate-x-0.5 transition-transform";
+const navLinkClass =
+  "flex items-center gap-1.5 text-xs font-medium text-stone-500 hover:text-stone-800 transition-colors dark:text-stone-400 dark:hover:text-stone-200";
 
 const Navbar = ({ variant, onAbout }: NavbarProps) => {
   if (variant === "hero") {
@@ -29,21 +33,18 @@ const Navbar = ({ variant, onAbout }: NavbarProps) => {
             Thesify
           </span>
           <div className="flex items-center gap-3">
-            <a
-              href="/analytics"
-              className="flex items-center gap-1.5 text-xs font-medium text-stone-500 hover:text-stone-800 transition-colors dark:text-stone-400 dark:hover:text-stone-200"
-            >
+            <Link to="/analytics" className={navLinkClass}>
               <BarChart2 className="h-3.5 w-3.5" />
               Analytics
-            </a>
-            <button
-              onClick={onAbout}
-              className="flex items-center gap-1.5 text-xs font-medium text-stone-500 hover:text-stone-800 transition-colors dark:text-stone-400 dark:hover:text-stone-200"
-            >
+            </Link>
+            <Link to="/reviews" className={navLinkClass}>
+              <MessageSquare className="h-3.5 w-3.5" />
+              Reviews
+            </Link>
+            <button onClick={onAbout} className={navLinkClass}>
               <Info className="h-3.5 w-3.5" />
               About
             </button>
-            
             <Badge label="Beta" />
           </div>
         </div>
@@ -55,11 +56,19 @@ const Navbar = ({ variant, onAbout }: NavbarProps) => {
     return (
       <header className={sharedHeaderClass}>
         <div className="max-w-screen-xl mx-auto flex items-center justify-between px-6 py-3">
-          <a href="/" className={backLinkClass}>
-            <ArrowLeft className={arrowClass + " h-3.5 w-3.5"} />
+          <Link to="/" className={backLinkClass}>
+            <ArrowLeft className={`${arrowClass} h-3.5 w-3.5`} />
             <span style={serifFont} className="text-base">Thesify</span>
-          </a>
+          </Link>
           <div className="flex items-center gap-3">
+            <Link to="/analytics" className={navLinkClass}>
+              <BarChart2 className="h-3.5 w-3.5" />
+              Analytics
+            </Link>
+            <Link to="/reviews" className={navLinkClass}>
+              <MessageSquare className="h-3.5 w-3.5" />
+              Reviews
+            </Link>
             <Badge label="Idea Generator" />
           </div>
         </div>
@@ -67,15 +76,40 @@ const Navbar = ({ variant, onAbout }: NavbarProps) => {
     );
   }
 
+  if (variant === "analytics") {
+    return (
+      <header className={sharedHeaderClass}>
+        <div className="max-w-screen-xl mx-auto flex items-center justify-between px-4 sm:px-6 py-3">
+          <Link to="/" className={`${backLinkClass} text-xs sm:text-sm`}>
+            <ArrowLeft className={`${arrowClass} h-3 w-3 sm:h-3.5 sm:w-3.5`} />
+            <span style={serifFont} className="text-sm sm:text-base">Thesify</span>
+          </Link>
+          <div className="flex items-center gap-3">
+            <Link to="/reviews" className={navLinkClass}>
+              <MessageSquare className="h-3.5 w-3.5" />
+              Reviews
+            </Link>
+            <Badge label="Analytics" />
+          </div>
+        </div>
+      </header>
+    );
+  }
+
+  // reviews variant
   return (
     <header className={sharedHeaderClass}>
       <div className="max-w-screen-xl mx-auto flex items-center justify-between px-4 sm:px-6 py-3">
-        <a href="/" className={backLinkClass + " text-xs sm:text-sm"}>
-          <ArrowLeft className={arrowClass + " h-3 w-3 sm:h-3.5 sm:w-3.5"} />
+        <Link to="/" className={`${backLinkClass} text-xs sm:text-sm`}>
+          <ArrowLeft className={`${arrowClass} h-3 w-3 sm:h-3.5 sm:w-3.5`} />
           <span style={serifFont} className="text-sm sm:text-base">Thesify</span>
-        </a>
+        </Link>
         <div className="flex items-center gap-3">
-          <Badge label="Analytics" />
+          <Link to="/analytics" className={navLinkClass}>
+            <BarChart2 className="h-3.5 w-3.5" />
+            Analytics
+          </Link>
+          <Badge label="Reviews" />
         </div>
       </div>
     </header>
