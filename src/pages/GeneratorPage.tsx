@@ -1,6 +1,5 @@
 import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, BarChart2 } from "lucide-react";
 import GeneratorForm, { type GeneratorFormData } from "@/components/GeneratorForm";
 import ResultCard, { type CapstoneResult } from "@/components/ResultCard";
 import SkeletonLoader from "@/components/SkeletonLoader";
@@ -41,7 +40,11 @@ const generateCapstone = async (data: GeneratorFormData): Promise<CapstoneResult
   };
 };
 
-const GeneratorPage = () => {
+interface GeneratorPageProps {
+  onBack?: () => void;
+}
+
+const GeneratorPage = ({ onBack }: GeneratorPageProps) => {
   const [result, setResult] = useState<CapstoneResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -81,18 +84,18 @@ const GeneratorPage = () => {
   };
 
   return (
-    // Lock the whole page to the viewport — no page scroll
-    <div className="h-screen flex flex-col bg-[#F7F6F3] dark:bg-[#0F0F0F] overflow-hidden">
+    <div
+      className="h-screen flex flex-col bg-[#F7F6F3] dark:bg-stone-900 overflow-hidden"
+      style={{ fontFamily: "'DM Sans', sans-serif" }}
+    >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap');
       `}</style>
 
-     <Navbar variant="generator" />
+      <Navbar variant="generator" onBack={onBack} />
 
-      {/* Main — scrollable on mobile, fixed on desktop */}
-      <main className="flex-1 overflow-y-auto lg:overflow-hidden max-w-screen-xl w-full mx-auto px-4 sm:px-6 py-4 sm:py-6 flex flex-col">
+      <main className="flex-1 overflow-hidden max-w-screen-xl w-full mx-auto px-6 py-6 flex flex-col">
 
-        {/* Page heading — shrink-0 */}
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -101,23 +104,21 @@ const GeneratorPage = () => {
         >
           <h2
             style={{ fontFamily: "'DM Serif Display', serif" }}
-            className="text-xl sm:text-2xl lg:text-3xl text-stone-900 dark:text-white leading-tight"
+            className="text-2xl sm:text-3xl text-stone-900 dark:text-stone-100 leading-tight"
           >
             Describe your project
           </h2>
-          <p className="mt-1 text-[11px] sm:text-xs text-stone-500 font-light">
+          <p className="mt-1 text-xs text-stone-500 dark:text-stone-400 font-light">
             Fill in the details below and we'll generate a tailored capstone proposal.
           </p>
         </motion.div>
 
-        {/* Two-column row — flex-1 on desktop, auto on mobile */}
-        <div className="lg:flex-1 lg:overflow-hidden flex flex-col lg:flex-row gap-3 sm:gap-6 lg:min-h-0">
+        <div className="flex-1 overflow-hidden flex gap-6 min-h-0">
 
-          {/* Form column — fixed width when split, centered when alone */}
           <motion.div
             layout
             transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
-            className={`lg:min-h-0 flex flex-col ${hasSubmitted ? "hidden lg:flex" : ""}`}
+            className="min-h-0 flex flex-col"
             style={{
               width: "100%",
               maxWidth: hasSubmitted ? "480px" : "672px",
@@ -126,7 +127,6 @@ const GeneratorPage = () => {
               flexShrink: 0,
             }}
           >
-            {/* Form fills column height */}
             <div className="flex-1 min-h-0">
               <GeneratorForm onSubmit={handleSubmit} isLoading={isLoading} />
             </div>
@@ -135,14 +135,13 @@ const GeneratorPage = () => {
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="shrink-0 mt-2 sm:mt-3 p-2 sm:p-3 rounded-lg sm:rounded-xl border border-red-200 bg-red-50 text-red-600 text-[11px] sm:text-xs font-light"
+                className="shrink-0 mt-3 p-3 rounded-xl border border-red-200 bg-red-50 text-red-600 text-xs font-light dark:border-red-900 dark:bg-red-950 dark:text-red-400"
               >
                 {error}
               </motion.div>
             )}
           </motion.div>
 
-          {/* Result column — slides in, scrollable internally */}
           <AnimatePresence>
             {hasSubmitted && (
               <motion.div
@@ -176,9 +175,8 @@ const GeneratorPage = () => {
           </AnimatePresence>
         </div>
 
-        {/* Mobile: result below form */}
         {hasSubmitted && (
-          <div className="shrink-0 mt-4 sm:mt-6 lg:hidden w-full">
+          <div className="shrink-0 mt-6 lg:hidden overflow-y-auto">
             <AnimatePresence mode="wait">
               {isLoading && (
                 <motion.div key="loader-sm" exit={{ opacity: 0 }}>
