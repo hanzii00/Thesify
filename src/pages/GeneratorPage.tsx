@@ -83,6 +83,12 @@ const GeneratorPage = ({ onBack }: GeneratorPageProps) => {
     }
   };
 
+  const handleStartOver = () => {
+    setHasSubmitted(false);
+    setResult(null);
+    setError(null);
+  };
+
   return (
     <div
       className="h-screen flex flex-col bg-[#F7F6F3] dark:bg-stone-900 overflow-hidden"
@@ -94,8 +100,8 @@ const GeneratorPage = ({ onBack }: GeneratorPageProps) => {
 
       <Navbar variant="generator" onBack={onBack} />
 
-      <main className="flex-1 overflow-hidden max-w-screen-xl w-full mx-auto px-6 py-6 flex flex-col">
-
+      {/* ── DESKTOP layout (lg+): side-by-side, unchanged ── */}
+      <main className="hidden lg:flex flex-1 overflow-hidden flex-col max-w-screen-xl w-full mx-auto px-6 py-6">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
@@ -114,7 +120,7 @@ const GeneratorPage = ({ onBack }: GeneratorPageProps) => {
         </motion.div>
 
         <div className="flex-1 overflow-hidden flex gap-6 min-h-0">
-
+          {/* Form column */}
           <motion.div
             layout
             transition={{ duration: 0.55, ease: [0.4, 0, 0.2, 1] }}
@@ -130,7 +136,6 @@ const GeneratorPage = ({ onBack }: GeneratorPageProps) => {
             <div className="flex-1 min-h-0">
               <GeneratorForm onSubmit={handleSubmit} isLoading={isLoading} />
             </div>
-
             {error && (
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
@@ -142,6 +147,7 @@ const GeneratorPage = ({ onBack }: GeneratorPageProps) => {
             )}
           </motion.div>
 
+          {/* Result column */}
           <AnimatePresence>
             {hasSubmitted && (
               <motion.div
@@ -151,7 +157,7 @@ const GeneratorPage = ({ onBack }: GeneratorPageProps) => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 24 }}
                 transition={{ duration: 0.45, ease: [0.4, 0, 0.2, 1], delay: 0.1 }}
-                className="flex-1 min-w-0 min-h-0 hidden lg:flex flex-col overflow-y-auto"
+                className="flex-1 min-w-0 min-h-0 flex flex-col overflow-y-auto"
               >
                 <AnimatePresence mode="wait">
                   {isLoading && (
@@ -174,28 +180,81 @@ const GeneratorPage = ({ onBack }: GeneratorPageProps) => {
             )}
           </AnimatePresence>
         </div>
+      </main>
 
-        {hasSubmitted && (
-          <div className="shrink-0 mt-6 lg:hidden overflow-y-auto">
-            <AnimatePresence mode="wait">
-              {isLoading && (
-                <motion.div key="loader-sm" exit={{ opacity: 0 }}>
-                  <SkeletonLoader />
-                </motion.div>
-              )}
-              {result && !isLoading && (
-                <motion.div
-                  key="result-sm"
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.35 }}
+      {/* ── MOBILE layout (<lg): full-screen states ── */}
+      <main className="flex lg:hidden flex-1 overflow-hidden flex-col">
+        <AnimatePresence mode="wait">
+
+          {/* State 1: Form */}
+          {!hasSubmitted && (
+            <motion.div
+              key="mobile-form"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25 }}
+              className="flex-1 overflow-hidden flex flex-col px-4 py-5"
+            >
+              <div className="shrink-0 mb-4">
+                <h2
+                  style={{ fontFamily: "'DM Serif Display', serif" }}
+                  className="text-2xl text-stone-900 dark:text-stone-100 leading-tight"
                 >
-                  <ResultCard result={result} onRegenerate={handleRegenerate} isLoading={isLoading} />
-                </motion.div>
+                  Describe your project
+                </h2>
+                <p className="mt-1 text-xs text-stone-500 dark:text-stone-400 font-light">
+                  Fill in the details and we'll generate a tailored proposal.
+                </p>
+              </div>
+              <div className="flex-1 min-h-0">
+                <GeneratorForm onSubmit={handleSubmit} isLoading={false} />
+              </div>
+            </motion.div>
+          )}
+
+          {/* State 2: Loader */}
+          {hasSubmitted && isLoading && (
+            <motion.div
+              key="mobile-loader"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25 }}
+              className="flex-1 flex items-center justify-center px-4"
+            >
+              <SkeletonLoader />
+            </motion.div>
+          )}
+
+          {/* State 3: Result */}
+          {hasSubmitted && !isLoading && (result || error) && (
+            <motion.div
+              key="mobile-result"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25 }}
+              className="flex-1 overflow-y-auto px-4 py-5"
+            >
+              {error && (
+                <div className="mb-4 p-3 rounded-xl border border-red-200 bg-red-50 text-red-600 text-xs font-light dark:border-red-900 dark:bg-red-950 dark:text-red-400">
+                  {error}
+                </div>
               )}
-            </AnimatePresence>
-          </div>
-        )}
+              {result && (
+                <ResultCard result={result} onRegenerate={handleRegenerate} isLoading={isLoading} />
+              )}
+              <button
+                onClick={handleStartOver}
+                className="mt-4 w-full text-xs text-stone-400 dark:text-stone-600 hover:text-stone-600 dark:hover:text-stone-400 transition-colors font-light py-2"
+              >
+                ← Start over
+              </button>
+            </motion.div>
+          )}
+
+        </AnimatePresence>
       </main>
     </div>
   );

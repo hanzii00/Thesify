@@ -26,7 +26,6 @@ interface ResultCardProps {
   isLoading: boolean;
 }
 
-
 const downloadAsWord = async (result: CapstoneResult) => {
   const doc = new Document({
     numbering: {
@@ -314,18 +313,43 @@ const ResultCard = ({ result, onRegenerate, isLoading }: ResultCardProps) => {
       .join("\n")}\n\nTech Stack: ${result.techStack.join(", ")}${
       result.methodology ? `\n\nMethodology: ${result.methodology}` : ""
     }`;
-
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleDownloadWord = async () => {
+    setIsDownloadingWord(true);
+    try {
+      await downloadAsWord(result);
+    } catch (err) {
+      console.error("Word download failed:", err);
+      alert("Failed to generate Word file. Please try again.");
+    } finally {
+      setIsDownloadingWord(false);
+    }
+  };
+
+  const handleGenerateResearchPaper = async () => {
+    setIsGeneratingPaper(true);
+    try {
+      await generateAndDownloadResearchPaper(result);
+    } catch (err: any) {
+      console.error("Research paper failed:", err);
+      alert(err.message ?? "Failed to generate research paper. Please try again.");
+    } finally {
+      setIsGeneratingPaper(false);
+    }
+  };
+
   return (
+    // On mobile this is a normal block so the page scrolls naturally.
+    // On desktop it sits inside an overflow-y-auto panel.
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-full"
+      className="w-full pb-6 lg:pb-0"
     >
       <div className="rounded-lg sm:rounded-2xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-800 shadow-sm overflow-hidden">
 
@@ -335,7 +359,7 @@ const ResultCard = ({ result, onRegenerate, isLoading }: ResultCardProps) => {
             Generated Proposal
           </p>
           <h3
-            className="text-lg sm:text-xl font-semibold text-stone-900 dark:text-white leading-snug line-clamp-2"
+            className="text-lg sm:text-xl font-semibold text-stone-900 dark:text-white leading-snug"
             style={{ fontFamily: "'DM Serif Display', serif" }}
           >
             {result.title}
@@ -388,11 +412,7 @@ const ResultCard = ({ result, onRegenerate, isLoading }: ResultCardProps) => {
               {result.techStack.map((tech) => (
                 <span
                   key={tech}
-                  className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md 
-                  bg-stone-100 dark:bg-stone-700 
-                  text-stone-600 dark:text-stone-200 
-                  text-[10px] sm:text-xs font-medium 
-                  border border-stone-200 dark:border-stone-600"
+                  className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-stone-100 dark:bg-stone-700 text-stone-600 dark:text-stone-200 text-[10px] sm:text-xs font-medium border border-stone-200 dark:border-stone-600"
                 >
                   {tech}
                 </span>
@@ -418,71 +438,38 @@ const ResultCard = ({ result, onRegenerate, isLoading }: ResultCardProps) => {
 
         {/* Actions */}
         <div className="px-4 sm:px-6 py-3 sm:py-4 border-t border-stone-100 dark:border-stone-700 bg-stone-50 dark:bg-stone-900 flex flex-wrap gap-2">
-
-          {/* Regenerate */}
           <button
             onClick={onRegenerate}
             disabled={isLoading}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg 
-            bg-stone-900 dark:bg-white 
-            text-white dark:text-black 
-            text-xs font-medium 
-            hover:bg-stone-800 dark:hover:bg-stone-200 
-            transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-stone-900 dark:bg-white text-white dark:text-black text-xs font-medium hover:bg-stone-800 dark:hover:bg-stone-200 transition-colors disabled:opacity-50"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />
             Regenerate
           </button>
 
-          {/* Copy */}
           <button
             onClick={handleCopy}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg 
-            border border-stone-200 dark:border-stone-600 
-            bg-white dark:bg-stone-800 
-            text-stone-600 dark:text-stone-300 
-            text-xs font-medium 
-            hover:bg-stone-50 dark:hover:bg-stone-700 transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-stone-200 dark:border-stone-600 bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 text-xs font-medium hover:bg-stone-50 dark:hover:bg-stone-700 transition-colors"
           >
             <Copy className="h-3.5 w-3.5" />
             {copied ? "Copied" : "Copy"}
           </button>
 
-          {/* Download */}
           <button
-            onClick={() => {}}
+            onClick={handleDownloadWord}
             disabled={isDownloadingWord}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg 
-            border border-stone-200 dark:border-stone-600 
-            bg-white dark:bg-stone-800 
-            text-stone-600 dark:text-stone-300 
-            text-xs font-medium 
-            hover:bg-stone-50 dark:hover:bg-stone-700 transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-stone-200 dark:border-stone-600 bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 text-xs font-medium hover:bg-stone-50 dark:hover:bg-stone-700 transition-colors disabled:opacity-50"
           >
-            {isDownloadingWord ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
-            ) : (
-              <Download className="h-3.5 w-3.5" />
-            )}
+            {isDownloadingWord ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
             Proposal
           </button>
 
-          {/* Research Paper */}
           <button
-            onClick={() => {}}
+            onClick={handleGenerateResearchPaper}
             disabled={isGeneratingPaper}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg 
-            border border-stone-200 dark:border-stone-600 
-            bg-white dark:bg-stone-800 
-            text-stone-600 dark:text-stone-300 
-            text-xs font-medium 
-            hover:bg-stone-50 dark:hover:bg-stone-700 transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-stone-200 dark:border-stone-600 bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 text-xs font-medium hover:bg-stone-50 dark:hover:bg-stone-700 transition-colors disabled:opacity-50"
           >
-            {isGeneratingPaper ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
-            ) : (
-              <FileText className="h-3.5 w-3.5" />
-            )}
+            {isGeneratingPaper ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <FileText className="h-3.5 w-3.5" />}
             Paper
           </button>
         </div>
