@@ -63,7 +63,7 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
                     <p className="text-xs text-stone-400 font-light mt-0.5">Creator & Developer</p>
                   </div>
                   <a
-                    href="https://github.com/secretfornow"
+                    href="https://github.com/hanzii00"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-1.5 text-xs font-medium text-stone-500 hover:text-stone-900 border border-stone-200 hover:border-stone-400 rounded-lg px-3 py-1.5 transition-all dark:text-stone-400 dark:hover:text-stone-100 dark:border-stone-700 dark:hover:border-stone-500"
@@ -126,6 +126,16 @@ const HeroSection = ({ onGetStarted }: HeroSectionProps) => {
               <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
             </button>
           </motion.div>
+
+          {/* Beta disclaimer */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4, delay: 0.4 }}
+            className="mt-4 text-[11px] text-stone-400 dark:text-stone-600 font-light max-w-sm leading-relaxed"
+          >
+            This is a beta version — expect bugs and things that still need improvement. Thanks for your patience!
+          </motion.p>
 
           <motion.div
             initial={{ opacity: 0 }}
