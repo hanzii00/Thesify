@@ -77,12 +77,9 @@ const ReviewCard = ({ review, index }: { review: Review; index: number }) => {
       transition={{ duration: 0.35, delay: index * 0.05 }}
       className="flex gap-3 p-4 rounded-2xl border border-stone-200 bg-white shadow-sm dark:bg-stone-800 dark:border-stone-700"
     >
-      {/* Avatar */}
       <div className="shrink-0 h-9 w-9 rounded-full bg-stone-900 dark:bg-stone-600 flex items-center justify-center">
         <span className="text-xs font-semibold text-white">{initials}</span>
       </div>
-
-      {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-2 flex-wrap">
           <div className="flex items-center gap-2">
@@ -146,13 +143,11 @@ const SubmitForm = ({ onSubmitted }: { onSubmitted: (r: Review) => void }) => {
       </div>
 
       <div className="p-5 space-y-4">
-        {/* Rating */}
         <div className="space-y-1.5">
           <label className="text-[11px] font-semibold tracking-widest text-stone-400 dark:text-stone-500 uppercase">Rating</label>
           <StarRating value={rating} onChange={setRating} />
         </div>
 
-        {/* Name */}
         <div className="space-y-1.5">
           <label className="text-[11px] font-semibold tracking-widest text-stone-400 dark:text-stone-500 uppercase flex items-center gap-1.5">
             Name <span className="text-[10px] text-stone-300 dark:text-stone-600 font-medium normal-case tracking-normal">optional</span>
@@ -167,7 +162,6 @@ const SubmitForm = ({ onSubmitted }: { onSubmitted: (r: Review) => void }) => {
           />
         </div>
 
-        {/* Message */}
         <div className="space-y-1.5">
           <label className="text-[11px] font-semibold tracking-widest text-stone-400 dark:text-stone-500 uppercase">Review</label>
           <textarea
@@ -182,9 +176,7 @@ const SubmitForm = ({ onSubmitted }: { onSubmitted: (r: Review) => void }) => {
           <p className="text-right text-[10px] text-stone-300 dark:text-stone-600">{message.length}/500</p>
         </div>
 
-        {error && (
-          <p className="text-xs text-red-500 font-light">{error}</p>
-        )}
+        {error && <p className="text-xs text-red-500 font-light">{error}</p>}
       </div>
 
       <div className="px-5 py-4 border-t border-stone-100 bg-stone-50 dark:bg-stone-900 dark:border-stone-800">
@@ -252,8 +244,9 @@ const ReviewsPage = () => {
     : null;
 
   return (
+    // Mobile: normal scroll. Desktop: locked to viewport
     <div
-      className="h-screen flex flex-col bg-[#F7F6F3] dark:bg-stone-900 overflow-hidden"
+      className="min-h-screen lg:h-screen flex flex-col bg-[#F7F6F3] dark:bg-stone-900 lg:overflow-hidden"
       style={{ fontFamily: "'DM Sans', sans-serif" }}
     >
       <style>{`
@@ -262,19 +255,19 @@ const ReviewsPage = () => {
 
       <Navbar variant="reviews" />
 
-      <main className="flex-1 overflow-hidden">
-        <div className="max-w-screen-xl mx-auto px-6 py-8 h-full flex flex-col">
+      <main className="flex-1 lg:overflow-hidden">
+        <div className="max-w-screen-xl mx-auto px-4 sm:px-6 py-6 sm:py-8 h-full flex flex-col">
 
           {/* Heading */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="shrink-0 mb-6"
+            className="shrink-0 mb-5 sm:mb-6"
           >
             <h2
               style={{ fontFamily: "'DM Serif Display', serif" }}
-              className="text-3xl text-stone-900 dark:text-stone-100"
+              className="text-2xl sm:text-3xl text-stone-900 dark:text-stone-100"
             >
               Reviews
             </h2>
@@ -294,21 +287,24 @@ const ReviewsPage = () => {
             </div>
           </motion.div>
 
-          {/* Two column */}
-          <div className="flex-1 overflow-hidden grid grid-cols-1 lg:grid-cols-[400px_1fr] gap-6 min-h-0">
+          {/*
+            Mobile: single column, stacked, page scrolls naturally
+            Desktop: two columns, each panel scrolls independently
+          */}
+          <div className="flex-1 lg:overflow-hidden flex flex-col lg:grid lg:grid-cols-[400px_1fr] gap-5 sm:gap-6 lg:min-h-0">
 
-            {/* Left: Submit form */}
+            {/* Submit form */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.05 }}
-              className="shrink-0"
+              className="lg:shrink-0"
             >
               <SubmitForm onSubmitted={handleNewReview} />
             </motion.div>
 
-            {/* Right: Reviews feed */}
-            <div className="overflow-y-auto min-h-0 space-y-3 pr-1">
+            {/* Reviews feed */}
+            <div className="lg:overflow-y-auto lg:min-h-0 space-y-3 pb-6 lg:pb-0 lg:pr-1">
               {loading && <Skeleton />}
 
               {error && (
@@ -321,10 +317,10 @@ const ReviewsPage = () => {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="flex flex-col items-center justify-center h-48 gap-3 text-stone-400 dark:text-stone-600"
+                  className="flex flex-col items-center justify-center h-48 gap-3"
                 >
                   <MessageSquare className="h-8 w-8 text-stone-300 dark:text-stone-700" />
-                  <p className="text-sm font-light">No reviews yet. Start the conversation!</p>
+                  <p className="text-sm font-light text-stone-400 dark:text-stone-600">No reviews yet. Start the conversation!</p>
                 </motion.div>
               )}
 
