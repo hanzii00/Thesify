@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Send, MessageSquare } from "lucide-react";
+import { Send, MessageSquare } from "lucide-react";
 import Navbar from "@/components/Navbar";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -13,7 +13,6 @@ interface Review {
   createdAt: string;
 }
 
-// ─── Star Rating ──────────────────────────────────────────────────────────────
 const StarRating = ({
   value,
   onChange,
@@ -23,32 +22,64 @@ const StarRating = ({
 }) => {
   const [hovered, setHovered] = useState(0);
   const interactive = !!onChange;
+  const id = useId();
+
+  const starPath =
+    "M 8 1 L 9.80 6.18 H 15.26 L 10.73 9.38 L 12.53 14.56 L 8 11.36 L 3.47 14.56 L 5.27 9.38 L 0.74 6.18 H 6.20 Z";
+
+  const GAP = 4;
+  const SIZE = 16;
+  const totalW = 5 * SIZE + 4 * GAP;
 
   return (
-    <div className="flex items-center gap-0.5">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <button
-          key={star}
-          type="button"
-          disabled={!interactive}
-          onClick={() => onChange?.(star)}
-          onMouseEnter={() => interactive && setHovered(star)}
+    <svg
+      width={totalW}
+      height={SIZE}
+      viewBox={`0 0 ${totalW} ${SIZE}`}
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ overflow: "visible", display: "block" }}
+    >
+      <defs>
+        {[0, 1, 2, 3, 4].map((i) => {
+          const fillFraction = interactive
+            ? hovered > 0
+              ? i < hovered ? 1 : 0
+              : Math.min(Math.max(value - i, 0), 1)
+            : Math.min(Math.max(value - i, 0), 1);
+
+          return (
+            <clipPath key={i} id={`${id}-star-${i}`}>
+              <rect
+                x={0}
+                y={0}
+                width={fillFraction * SIZE}
+                height={SIZE}
+              />
+            </clipPath>
+          );
+        })}
+      </defs>
+
+      {[0, 1, 2, 3, 4].map((i) => (
+        <g
+          key={i}
+          transform={`translate(${i * (SIZE + GAP)}, 0)`}
+          onClick={() => interactive && onChange?.(i + 1)}
+          onMouseEnter={() => interactive && setHovered(i + 1)}
           onMouseLeave={() => interactive && setHovered(0)}
-          className={`transition-transform ${interactive ? "hover:scale-110 cursor-pointer" : "cursor-default"}`}
+          style={{ cursor: interactive ? "pointer" : "default" }}
         >
-          <Star
-            className={`h-4 w-4 transition-colors ${
-              star <= (hovered || value)
-                ? "fill-stone-700 text-stone-700 dark:fill-stone-300 dark:text-stone-300"
-                : "fill-stone-200 text-stone-200 dark:fill-stone-700 dark:text-stone-700"
-            }`}
+          <path d={starPath} className="fill-stone-200 dark:fill-stone-700" />
+          <path
+            d={starPath}
+            className="fill-stone-700 dark:fill-stone-300"
+            clipPath={`url(#${id}-star-${i})`}
           />
-        </button>
+        </g>
       ))}
-    </div>
+    </svg>
   );
 };
-
 // ─── Review Card ──────────────────────────────────────────────────────────────
 const ReviewCard = ({ review, index }: { review: Review; index: number }) => {
   const initials = review.name
@@ -83,12 +114,18 @@ const ReviewCard = ({ review, index }: { review: Review; index: number }) => {
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between gap-2 flex-wrap">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-stone-800 dark:text-stone-100">{review.name}</span>
+            <span className="text-sm font-medium text-stone-800 dark:text-stone-100">
+              {review.name}
+            </span>
             <StarRating value={review.rating} />
           </div>
-          <span className="text-xs text-stone-400 dark:text-stone-500 font-light shrink-0">{timeAgo(review.createdAt)}</span>
+          <span className="text-xs text-stone-400 dark:text-stone-500 font-light shrink-0">
+            {timeAgo(review.createdAt)}
+          </span>
         </div>
-        <p className="mt-1.5 text-sm text-stone-600 dark:text-stone-400 font-light leading-relaxed">{review.message}</p>
+        <p className="mt-1.5 text-sm text-stone-600 dark:text-stone-400 font-light leading-relaxed">
+          {review.message}
+        </p>
       </div>
     </motion.div>
   );
@@ -105,7 +142,10 @@ const SubmitForm = ({ onSubmitted }: { onSubmitted: (r: Review) => void }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!message.trim()) return;
-    if (rating === 0) { setError("Please select a star rating."); return; }
+    if (rating === 0) {
+      setError("Please select a star rating.");
+      return;
+    }
 
     setLoading(true);
     setError(null);
@@ -136,21 +176,33 @@ const SubmitForm = ({ onSubmitted }: { onSubmitted: (r: Review) => void }) => {
     "w-full rounded-xl border border-stone-200 bg-white px-3.5 py-2.5 text-sm text-stone-800 placeholder-stone-400 font-light outline-none transition-all hover:border-stone-300 focus:border-stone-400 focus:ring-2 focus:ring-stone-200 dark:bg-stone-800 dark:border-stone-700 dark:text-stone-100 dark:placeholder-stone-500 dark:hover:border-stone-600 dark:focus:border-stone-500 dark:focus:ring-stone-700";
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-2xl border border-stone-200 bg-white shadow-sm overflow-hidden dark:bg-stone-800 dark:border-stone-700">
+    <form
+      onSubmit={handleSubmit}
+      className="rounded-2xl border border-stone-200 bg-white shadow-sm overflow-hidden dark:bg-stone-800 dark:border-stone-700"
+    >
       <div className="px-5 py-4 border-b border-stone-100 bg-stone-50 dark:bg-stone-900 dark:border-stone-800">
-        <p className="text-[11px] font-semibold tracking-widest text-stone-400 uppercase dark:text-stone-500">Leave a Review</p>
-        <p className="text-xs text-stone-400 dark:text-stone-500 font-light mt-0.5">Your name is optional — you can stay anonymous</p>
+        <p className="text-[11px] font-semibold tracking-widest text-stone-400 uppercase dark:text-stone-500">
+          Leave a Review
+        </p>
+        <p className="text-xs text-stone-400 dark:text-stone-500 font-light mt-0.5">
+          Your name is optional — you can stay anonymous
+        </p>
       </div>
 
       <div className="p-5 space-y-4">
         <div className="space-y-1.5">
-          <label className="text-[11px] font-semibold tracking-widest text-stone-400 dark:text-stone-500 uppercase">Rating</label>
+          <label className="text-[11px] font-semibold tracking-widest text-stone-400 dark:text-stone-500 uppercase">
+            Rating
+          </label>
           <StarRating value={rating} onChange={setRating} />
         </div>
 
         <div className="space-y-1.5">
           <label className="text-[11px] font-semibold tracking-widest text-stone-400 dark:text-stone-500 uppercase flex items-center gap-1.5">
-            Name <span className="text-[10px] text-stone-300 dark:text-stone-600 font-medium normal-case tracking-normal">optional</span>
+            Name{" "}
+            <span className="text-[10px] text-stone-300 dark:text-stone-600 font-medium normal-case tracking-normal">
+              optional
+            </span>
           </label>
           <input
             type="text"
@@ -163,7 +215,9 @@ const SubmitForm = ({ onSubmitted }: { onSubmitted: (r: Review) => void }) => {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-[11px] font-semibold tracking-widest text-stone-400 dark:text-stone-500 uppercase">Review</label>
+          <label className="text-[11px] font-semibold tracking-widest text-stone-400 dark:text-stone-500 uppercase">
+            Review
+          </label>
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
@@ -173,10 +227,14 @@ const SubmitForm = ({ onSubmitted }: { onSubmitted: (r: Review) => void }) => {
             className={`${inputClass} resize-none`}
             required
           />
-          <p className="text-right text-[10px] text-stone-300 dark:text-stone-600">{message.length}/500</p>
+          <p className="text-right text-[10px] text-stone-300 dark:text-stone-600">
+            {message.length}/500
+          </p>
         </div>
 
-        {error && <p className="text-xs text-red-500 font-light">{error}</p>}
+        {error && (
+          <p className="text-xs text-red-500 font-light">{error}</p>
+        )}
       </div>
 
       <div className="px-5 py-4 border-t border-stone-100 bg-stone-50 dark:bg-stone-900 dark:border-stone-800">
@@ -201,7 +259,10 @@ const SubmitForm = ({ onSubmitted }: { onSubmitted: (r: Review) => void }) => {
 const Skeleton = () => (
   <div className="space-y-3">
     {[...Array(3)].map((_, i) => (
-      <div key={i} className="flex gap-3 p-4 rounded-2xl border border-stone-200 bg-white dark:bg-stone-800 dark:border-stone-700">
+      <div
+        key={i}
+        className="flex gap-3 p-4 rounded-2xl border border-stone-200 bg-white dark:bg-stone-800 dark:border-stone-700"
+      >
         <div className="h-9 w-9 rounded-full bg-stone-100 dark:bg-stone-700 animate-pulse shrink-0" />
         <div className="flex-1 space-y-2">
           <div className="h-3 w-32 rounded-full bg-stone-100 dark:bg-stone-700 animate-pulse" />
@@ -244,7 +305,6 @@ const ReviewsPage = () => {
     : null;
 
   return (
-    // Mobile: normal scroll. Desktop: locked to viewport
     <div
       className="min-h-screen lg:h-screen flex flex-col bg-[#F7F6F3] dark:bg-stone-900 lg:overflow-hidden"
       style={{ fontFamily: "'DM Sans', sans-serif" }}
@@ -274,23 +334,23 @@ const ReviewsPage = () => {
             <div className="mt-1 flex items-center gap-3">
               {avgRating && (
                 <div className="flex items-center gap-1.5">
-                  <StarRating value={Math.round(Number(avgRating))} />
-                  <span className="text-sm font-medium text-stone-700 dark:text-stone-300">{avgRating}</span>
+                  <StarRating value={Number(avgRating)} />
+                  <span className="text-sm font-medium text-stone-700 dark:text-stone-300">
+                    {avgRating}
+                  </span>
                   <span className="text-xs text-stone-400 dark:text-stone-500 font-light">
                     ({reviews.length} {reviews.length === 1 ? "review" : "reviews"})
                   </span>
                 </div>
               )}
               {!avgRating && !loading && (
-                <p className="text-xs text-stone-400 dark:text-stone-500 font-light">No reviews yet — be the first!</p>
+                <p className="text-xs text-stone-400 dark:text-stone-500 font-light">
+                  No reviews yet — be the first!
+                </p>
               )}
             </div>
           </motion.div>
 
-          {/*
-            Mobile: single column, stacked, page scrolls naturally
-            Desktop: two columns, each panel scrolls independently
-          */}
           <div className="flex-1 lg:overflow-hidden flex flex-col lg:grid lg:grid-cols-[400px_1fr] gap-5 sm:gap-6 lg:min-h-0">
 
             {/* Submit form */}
@@ -320,7 +380,9 @@ const ReviewsPage = () => {
                   className="flex flex-col items-center justify-center h-48 gap-3"
                 >
                   <MessageSquare className="h-8 w-8 text-stone-300 dark:text-stone-700" />
-                  <p className="text-sm font-light text-stone-400 dark:text-stone-600">No reviews yet. Start the conversation!</p>
+                  <p className="text-sm font-light text-stone-400 dark:text-stone-600">
+                    No reviews yet. Start the conversation!
+                  </p>
                 </motion.div>
               )}
 
